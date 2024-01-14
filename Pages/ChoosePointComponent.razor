@@ -1,0 +1,67 @@
+
+<div class="number-pad">
+    @foreach (var number in _numbers)
+    {
+        <button class="btn btn-primary" @onclick="() => ButtonClick(number)">@number</button>
+    }
+
+    <button class="btn btn-primary" @onclick="DoubleClick">Double</button>
+    <button class="btn btn-primary" @onclick="TripleClick">Triple</button>
+    <button class="btn btn-danger" @onclick="BackClick">Back</button>
+</div>
+
+<style>
+    .number-pad {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 8px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 8px;
+    }
+</style>
+
+
+@code {
+    private readonly List<int> _numbers = Enumerable.Range(0, 21).ToList(); // Numbers 0 to 20
+    private const int Bullseye = 25;
+    private bool _doubleClicked;
+    private bool _tripleClicked;
+
+    [Parameter] public EventCallback<int> OnButtonClick { get; set; }
+    [Parameter] public EventCallback OnBackClick { get; set; }
+
+    private void ButtonClick(int value)
+    {
+        if (_doubleClicked)
+        {
+            value *= 2;
+            _doubleClicked = false;
+        }
+        else if (_tripleClicked)
+        {
+            value *= 3;
+            _tripleClicked = false;
+        }
+        OnButtonClick.InvokeAsync(value);
+    }
+
+    private void DoubleClick()
+    {
+        _doubleClicked = true;
+        _tripleClicked = false;
+    }
+
+    private void TripleClick()
+    {
+        _doubleClicked = false;
+        _tripleClicked = true;
+    }
+
+    private void BackClick()
+    {
+        OnBackClick.InvokeAsync();
+    }
+}

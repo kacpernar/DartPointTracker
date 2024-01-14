@@ -1,0 +1,40 @@
+﻿@page "/game"
+@using DartPointTracker.Services
+@using DartPointTracker.Models
+@inject IGameService GameService
+
+
+@if (GameService.CurrentGame is not null)
+{
+    @foreach (var player in GameService.CurrentGame.Players)
+    {
+        <div class="input-group">
+            <h1>@player.Name -- Score: @player.Score</h1>
+
+            @foreach (var dartThrow in player.CurrentRoundThrows)
+            {
+                <h2>@dartThrow </h2>
+            }
+        </div>
+
+        <ChoosePointComponent
+            OnButtonClick="AddDartThrow"
+            OnBackClick="HandleBackClick" />
+    }
+}
+
+
+@code {
+    private int _dartThrow;
+
+    private void AddDartThrow(int value)
+    {
+        _dartThrow = value;
+        GameService.CurrentGame.CurrentPlayer.AddDartThrow(_dartThrow);
+    }
+    private void HandleBackClick()
+    {
+        GameService.CurrentGame.CurrentPlayer.RemoveLastDartThrow();
+    }
+
+}

@@ -1,0 +1,55 @@
+﻿@page "/"
+@using DartPointTracker.Models
+@using DartPointTracker.Services
+@inject IGameService GameService
+@inject NavigationManager NavigationManager
+<div class="mb-3">
+    <label for="gameMode" class="form-label">Select Game Mode:</label>
+    <select id="gameMode" @bind="_gamePoints" class="form-select">
+        @foreach (var gamePoints in GameSettings.GamePoints)
+        {
+            <option value="@gamePoints">@gamePoints</option>
+        }
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="playerName" class="form-label">Enter Player Name:</label>
+    <input id="playerName" @bind="_currentPlayerName" class="form-control" />
+    <button class="btn btn-primary mt-2" @onclick="AddPlayer">Add Player</button>
+</div>
+
+@if (_players.Any())
+{
+    <div class="mb-3">
+        <h4>Players:</h4>
+        <ul>
+            @foreach (var player in _players)
+            {
+                <li>@player.Name</li>
+            }
+        </ul>
+    </div>
+}
+
+<button class="btn btn-primary mt-2" @onclick="StartGame">StartGame</button>
+
+@code {
+    private int _gamePoints;
+    private string _currentPlayerName = string.Empty;
+    private readonly List<Player> _players = [];
+
+    void AddPlayer()
+    {
+        if (string.IsNullOrWhiteSpace(_currentPlayerName))
+            return;
+        _players.Add(new Player(_currentPlayerName));
+        _currentPlayerName = string.Empty;
+    }
+    async Task StartGame()
+    {
+        await GameService.InitializeGame(_players, _gamePoints);
+        NavigationManager.NavigateTo("/game");
+    }
+
+}
