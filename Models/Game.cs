@@ -15,22 +15,38 @@ public class Game
     }
 
     private int GamePoints { get; set; }
-    public List<Player> Players { get; set; }
-    public Player CurrentPlayer { get; set; }
 
-    private int _currentPlayerThrowNubmer;
+    public List<Player> Ranking { get; set; } = [];
+    public List<Player> Players { get; set; }
+    private Player CurrentPlayer { get; set; }
+
+    public bool IsFinished { get; set; }
+
+    private int _currentPlayerThrowNumber;
     private int _totalThrows;
 
     public void AddDartThrow(int points)
     {
         _totalThrows++;
-        _currentPlayerThrowNubmer++;
-        CurrentPlayer.AddDartThrow(points);
-        if (_currentPlayerThrowNubmer == 3)
+        _currentPlayerThrowNumber++;
+        var validThrow = CurrentPlayer.AddDartThrow(points);
+        if (!validThrow)
         {
-            _currentPlayerThrowNubmer = 0;
             NextPlayer();
-            CurrentPlayer.StartNewRound();
+        }
+        else if (CurrentPlayer.Won)
+        {
+            Ranking.Add(CurrentPlayer);
+            if (Ranking.Count == Players.Count - 1)
+            {
+                IsFinished = true;
+                return;
+            }
+            NextPlayer();
+        }
+        else if (_currentPlayerThrowNumber == 3)
+        {
+            NextPlayer();
         }
 
     }
@@ -44,28 +60,41 @@ public class Game
         {
             return;
         }
-        if (_currentPlayerThrowNubmer == 0)
+        if (_currentPlayerThrowNumber == 0)
         {
-            _currentPlayerThrowNubmer = 2;
-            CurrentPlayer.ReloadPreviousRound();
             PreviousPlayer();
         }
         else
         {
-            _currentPlayerThrowNubmer--;
+            _currentPlayerThrowNumber--;
+        }
+
+        if (CurrentPlayer.Won)
+        {
+            CurrentPlayer.Won = false;
+            Ranking.Remove(CurrentPlayer);
         }
         CurrentPlayer.RemoveLastDartThrow();
     }
 
     private void PreviousPlayer()
     {
+        CurrentPlayer.ReloadPreviousRound();
         var index = Players.IndexOf(CurrentPlayer);
         CurrentPlayer = index == 0 ? Players[^1] : Players[index - 1];
+        _currentPlayerThrowNumber = 2;
+
     }
     private void NextPlayer()
     {
-        var index = Players.IndexOf(CurrentPlayer);
-        CurrentPlayer = index == Players.Count - 1 ? Players[0] : Players[index + 1];
+        _currentPlayerThrowNumber = 0;
+        do
+        {
+            var index = Players.IndexOf(CurrentPlayer);
+            CurrentPlayer = index == Players.Count - 1 ? Players[0] : Players[index + 1];
+        }
+        while (CurrentPlayer.Won);
+        CurrentPlayer.StartNewRound();
     }
 
 }

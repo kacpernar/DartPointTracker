@@ -1,6 +1,5 @@
 ﻿@page "/game"
 @using DartPointTracker.Services
-@using DartPointTracker.Models
 @inject IGameService GameService
 
 
@@ -8,14 +7,24 @@
 {
     @foreach (var player in GameService.CurrentGame.Players)
     {
-        <div class="input-group">
-            <h1>@player.Name -- Score: @player.Score -</h1>
+        if (player.Won)
+        {
+            <div class="input-group">
+                <h1>@player.Name -- Score: @player.Score -</h1>
+                <h1>Won</h1>
+            </div>
+        }
+        else
+        {
+            <div class="input-group">
+                <h1>@player.Name -- Score: @player.Score -</h1>
 
-            @foreach (var dartThrow in player.CurrentRoundThrows)
-            {
-                <h1>@dartThrow-</h1>
-            }
-        </div>
+                @foreach (var dartThrow in player.CurrentRoundThrows)
+                {
+                    <h1>@dartThrow-</h1>
+                }
+            </div>
+        }
     }
     <ChoosePointComponent
         OnButtonClick="AddDartThrow"

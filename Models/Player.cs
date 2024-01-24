@@ -8,18 +8,31 @@ public class Player(string name)
     public int CurrentThrowNumber => DartThrows.Count;
 
     public int[] CurrentRoundThrows = [0, 0, 0];
-    public bool Won => Score == 0;
+    public bool Won { get; set; }
+    private bool LastRoundOverThrow { get; set; }
 
 
     public void StartNewRound()
     {
         CurrentRoundThrows = [0, 0, 0];
     }
-    public void AddDartThrow(int points)
+    public bool AddDartThrow(int points)
     {
         CurrentRoundThrows[CurrentThrowNumber%3] = points;
         DartThrows.Add(new Throw(CurrentThrowNumber, points));
         Score -= points;
+        switch (Score)
+        {
+            case < 0:
+                Score += CurrentRoundThrows.Sum();
+                LastRoundOverThrow = true;
+                return false;
+            case 0:
+                Won = true;
+                break;
+        }
+
+        return true;
     }
     public void RemoveLastDartThrow()
     {
@@ -29,7 +42,15 @@ public class Player(string name)
         var lastThrow = DartThrows.Last();
         DartThrows.Remove(lastThrow);
         CurrentRoundThrows[CurrentThrowNumber%3] = 0;
-        Score += lastThrow.Score;
+        if (LastRoundOverThrow)
+        {
+            Score -= CurrentRoundThrows.Sum();
+            LastRoundOverThrow = false;
+        }
+        else
+        {
+            Score += lastThrow.Score;
+        }
 
     }
 
