@@ -5,29 +5,41 @@ public class Player(string name)
     public string Name { get; set; } = name;
     public int Score { get; set; }
     public List<Throw> DartThrows { get; set; } = [];
-    public int CurrenThrowNumber = 1;
+    public int CurrentThrowNumber => DartThrows.Count;
 
-    public int[] CurrentRoundThrows = new int[3];
+    public int[] CurrentRoundThrows = [0, 0, 0];
+    public bool Won => Score == 0;
 
-    public bool IsFinished => Score == 0;
 
-
+    public void StartNewRound()
+    {
+        CurrentRoundThrows = [0, 0, 0];
+    }
     public void AddDartThrow(int points)
     {
-        CurrentRoundThrows[CurrenThrowNumber % 3 - 1] = points;
-        DartThrows.Add(new Throw(CurrenThrowNumber, points));
-        CurrenThrowNumber++;
+        CurrentRoundThrows[CurrentThrowNumber%3] = points;
+        DartThrows.Add(new Throw(CurrentThrowNumber, points));
         Score -= points;
     }
     public void RemoveLastDartThrow()
     {
-        if (CurrenThrowNumber == 1)
+        if (CurrentThrowNumber == 0)
             return;
 
-        var lastThrow = DartThrows[CurrenThrowNumber - 1];
+        var lastThrow = DartThrows.Last();
         DartThrows.Remove(lastThrow);
+        CurrentRoundThrows[CurrentThrowNumber%3] = 0;
         Score += lastThrow.Score;
-        CurrenThrowNumber--;
+
+    }
+
+    public void ReloadPreviousRound()
+    {
+        if(CurrentThrowNumber < 3)
+            return;
+        CurrentRoundThrows[0] = DartThrows[^3].Score;
+        CurrentRoundThrows[1] = DartThrows[^2].Score;
+        CurrentRoundThrows[2] = DartThrows[^1].Score;
     }
 
 }

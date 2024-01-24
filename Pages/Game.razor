@@ -9,18 +9,17 @@
     @foreach (var player in GameService.CurrentGame.Players)
     {
         <div class="input-group">
-            <h1>@player.Name -- Score: @player.Score</h1>
+            <h1>@player.Name -- Score: @player.Score -</h1>
 
             @foreach (var dartThrow in player.CurrentRoundThrows)
             {
-                <h2>@dartThrow </h2>
+                <h1>@dartThrow-</h1>
             }
         </div>
-
-        <ChoosePointComponent
-            OnButtonClick="AddDartThrow"
-            OnBackClick="HandleBackClick" />
     }
+    <ChoosePointComponent
+        OnButtonClick="AddDartThrow"
+        OnBackClick="HandleBackClick" />
 }
 
 
@@ -30,11 +29,11 @@
     private void AddDartThrow(int value)
     {
         _dartThrow = value;
-        GameService.CurrentGame.CurrentPlayer.AddDartThrow(_dartThrow);
+        GameService.CurrentGame.AddDartThrow(_dartThrow);
     }
     private void HandleBackClick()
     {
-        GameService.CurrentGame.CurrentPlayer.RemoveLastDartThrow();
+        GameService.CurrentGame.RemoveLastDartThrow();
     }
 
 }
