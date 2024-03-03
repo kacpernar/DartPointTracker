@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DartPointTracker", "DartPointTracker/DartPointTracker.csproj", "{C51FC36E-9D2F-4017-9E66-3E708BE868DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DartPointTracker.Api", "DartPointTracker.Api\DartPointTracker.Api.csproj", "{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C51FC36E-9D2F-4017-9E66-3E708BE868DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C51FC36E-9D2F-4017-9E66-3E708BE868DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C51FC36E-9D2F-4017-9E66-3E708BE868DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

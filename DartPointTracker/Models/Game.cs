@@ -4,6 +4,7 @@ public class Game
 {
     public Game(List<Player> players, int gamePoints)
     {
+        GameId = Guid.NewGuid().ToString();
         GamePoints = gamePoints;
         foreach (var player in players)
         {
@@ -14,6 +15,7 @@ public class Game
         CurrentPlayer = players[0];
     }
 
+    string GameId { get; set; }
     private int GamePoints { get; set; }
 
     public List<Player> Players { get; set; }
