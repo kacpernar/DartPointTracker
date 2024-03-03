@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DartPointTracker", "DartPointTracker.csproj", "{C51FC36E-9D2F-4017-9E66-3E708BE868DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DartPointTracker", "DartPointTracker/DartPointTracker.csproj", "{C51FC36E-9D2F-4017-9E66-3E708BE868DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
