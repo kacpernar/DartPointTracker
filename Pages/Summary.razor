@@ -1,0 +1,61 @@
+@page "/Summary"
+@using DartPointTracker.Services
+@inject IGameService GameService
+
+<h3>Summary</h3>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #ddd;
+    }
+</style>
+
+
+@if (GameService.CurrentGame is not null && GameService.CurrentGame.IsFinished)
+{
+    <table>
+        <thead>
+        <tr>
+            <th>Place</th>
+            <th>Player Name</th>
+            <th>Throws</th>
+            <th>Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            var i = 1;
+            foreach (var player in GameService.CurrentGame.Ranking)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@player.Name</td>
+                    <td>@player.CurrentThrowNumber</td>
+                    <td>@player.Score</td>
+                </tr>
+                i++;
+            }
+        }
+        </tbody>
+    </table>
+}
+
+
+@code {
+
+}

@@ -4,25 +4,11 @@
     {
         <button class="btn btn-primary" @onclick="() => ButtonClick(number)">@number</button>
     }
-    <button class="btn btn-primary" @onclick="() =>ButtonClick(Bullseye)">Bullseye</button>
+    <button class="btn btn-primary" @onclick="() =>ButtonClick(Bullseye)">@Bullseye</button>
     <button class="btn btn-primary" @onclick="DoubleClick">Double</button>
     <button class="btn btn-primary" @onclick="TripleClick">Triple</button>
-    <button class="btn btn-danger" @onclick="BackClick">Back</button>
 </div>
-
-<style>
-    .number-pad {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-gap: 8px;
-    }
-
-    .btn {
-        width: 100%;
-        margin-top: 8px;
-    }
-</style>
-
+<button class="btn btn-danger" @onclick="BackClick">Back</button>
 
 @code {
     private readonly List<int> _numbers = Enumerable.Range(0, 21).ToList(); // Numbers 0 to 20

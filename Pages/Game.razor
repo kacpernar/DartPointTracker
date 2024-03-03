@@ -1,34 +1,40 @@
 ﻿@page "/game"
 @using DartPointTracker.Services
 @inject IGameService GameService
-
+@inject NavigationManager NavigationManager
 
 @if (GameService.CurrentGame is not null)
 {
-    @foreach (var player in GameService.CurrentGame.Players)
-    {
-        if (player.Won)
+    <div class="players-wrapper">
+        @foreach (var player in GameService.CurrentGame.Players)
         {
-            <div class="input-group">
-                <h1>@player.Name -- Score: @player.Score -</h1>
-                <h1>Won</h1>
-            </div>
-        }
-        else
-        {
-            <div class="input-group">
-                <h1>@player.Name -- Score: @player.Score -</h1>
+            <div class="player-info @(player.Id == GameService.CurrentGame.CurrentPlayer.Id ? "active-player" : "inactive-player")">
+                <div>@player.Name: @player.Score</div>
 
-                @foreach (var dartThrow in player.CurrentRoundThrows)
-                {
-                    <h1>@dartThrow-</h1>
-                }
+                <div class="input-group">
+
+                    @if (player.Won)
+                    {
+                        <h1>Won</h1>
+                    }
+                    else
+                    {
+                        <div class="circle-container">
+                            @foreach (var dartThrow in player.CurrentRoundThrows)
+                            {
+                                <div class="circle">@dartThrow</div>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
         }
-    }
+    </div>
+
+
     <ChoosePointComponent
         OnButtonClick="AddDartThrow"
-        OnBackClick="HandleBackClick" />
+        OnBackClick="HandleBackClick"/>
 }
 
 
@@ -39,7 +45,12 @@
     {
         _dartThrow = value;
         GameService.CurrentGame.AddDartThrow(_dartThrow);
+        if (GameService.CurrentGame.IsFinished)
+        {
+            NavigationManager.NavigateTo("/summary");
+        }
     }
+
     private void HandleBackClick()
     {
         GameService.CurrentGame.RemoveLastDartThrow();

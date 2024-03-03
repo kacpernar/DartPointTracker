@@ -2,37 +2,41 @@ namespace DartPointTracker.Models;
 
 public class Player(string name)
 {
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string Name { get; set; } = name;
     public int Score { get; set; }
     public List<Throw> DartThrows { get; set; } = [];
     public int CurrentThrowNumber => DartThrows.Count;
 
-    public int[] CurrentRoundThrows = [0, 0, 0];
+    public int?[] CurrentRoundThrows = [null, null, null];
+    public int ThrowNumberInGameAtWin { get; set; }
     public bool Won { get; set; }
     private bool LastRoundOverThrow { get; set; }
 
 
+    public int CurrentRoundThrowNumber => CurrentThrowNumber % 3;
     public void StartNewRound()
     {
-        CurrentRoundThrows = [0, 0, 0];
+        CurrentRoundThrows = [null, null, null];
     }
-    public bool AddDartThrow(int points)
+    public (bool validThrow, int currentRoundThrowNumber) AddDartThrow(int points)
     {
-        CurrentRoundThrows[CurrentThrowNumber%3] = points;
+        CurrentRoundThrows[CurrentRoundThrowNumber] = points;
         DartThrows.Add(new Throw(CurrentThrowNumber, points));
         Score -= points;
         switch (Score)
         {
             case < 0:
-                Score += CurrentRoundThrows.Sum();
+                Score += CurrentRoundThrows.Where(x => x.HasValue).Sum(x => x.Value);
+
                 LastRoundOverThrow = true;
-                return false;
+                return (false, CurrentRoundThrowNumber);
             case 0:
                 Won = true;
                 break;
         }
 
-        return true;
+        return (true, CurrentRoundThrowNumber);
     }
     public void RemoveLastDartThrow()
     {
@@ -41,10 +45,10 @@ public class Player(string name)
 
         var lastThrow = DartThrows.Last();
         DartThrows.Remove(lastThrow);
-        CurrentRoundThrows[CurrentThrowNumber%3] = 0;
+        CurrentRoundThrows[CurrentRoundThrowNumber] = 0;
         if (LastRoundOverThrow)
         {
-            Score -= CurrentRoundThrows.Sum();
+            Score -= CurrentRoundThrows.Where(x => x.HasValue).Sum(x => x.Value);
             LastRoundOverThrow = false;
         }
         else

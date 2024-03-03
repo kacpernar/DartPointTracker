@@ -32,6 +32,66 @@ a, .btn-link {
     outline: 1px solid red;
 }
 
+.circle {
+    width: 40px; /* Adjust the width as needed */
+    height: 40px; /* Adjust the height as needed */
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    line-height: 40px; /* Center content vertically */
+    border-radius: 50%;
+    background: #09f;
+    margin-right: 10px; /* Add space between circles */
+}
+
+.players-wrapper{
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: flex; /* Use flexbox for horizontal layout */
+
+}
+.player-info{
+    /*background: lightblue;*/
+
+    padding: 10px;
+    flex: 1;
+}
+.active-player{
+    border-left: 10px greenyellow solid;
+}
+.inactive-player{
+    border-left: 10px red solid;
+}
+.circle-container {
+    display: flex; /* Use flexbox for horizontal layout */
+    flex-wrap: nowrap; /* Prevent wrapping to next row */
+}
+
+
+.input-group {
+    margin-bottom: 10px;
+}
+
+.dart-throw, .empty-square {
+    display: inline-block;
+    width: 30px; /* Keeping the width as 30px */
+    height: 30px; /* Setting the height to 10px */
+    border: 1px solid #000;
+    text-align: center;
+    line-height: 10px;
+    margin-right: 5px;
+}
+.number-pad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 8px;
+}
+
+.btn {
+    width: 100%;
+    margin-top: 8px;
+}
+
 .validation-message {
     color: red;
 }
