@@ -1,54 +1,74 @@
 ﻿@page "/"
 @using DartPointTracker.Models
 @using DartPointTracker.Services
+@using DartPointTracker.Components
 @inject IGameService GameService
+@inject IPlayerService PlayerService
 @inject NavigationManager NavigationManager
+
 <div class="mb-3">
-    <label for="gameMode" class="form-label">Select Game Mode:</label>
-    <select id="gameMode" @bind="_gamePoints" class="form-select">
+    <label class="form-label">Select Game Mode:</label>
+    <div class="game-mode-container">
         @foreach (var gamePoints in GameSettings.GamePoints)
         {
-            <option value="@gamePoints">@gamePoints</option>
+            <button class="game-mode @(gamePoints == _gamePoints ? "selected" : "")" @onclick="() => SelectGameMode(gamePoints)">@gamePoints</button>
         }
-    </select>
+    </div>
 </div>
+
 
 <div class="mb-3">
-    <label for="playerName" class="form-label">Enter Player Name:</label>
-    <input id="playerName" @bind="_currentPlayerName" class="form-control" />
-    <button class="btn btn-primary mt-2" @onclick="AddPlayer">Add Player</button>
-</div>
-
-@if (_players.Any())
-{
-    <div class="mb-3">
-        <h4>Players:</h4>
-        <ul>
-            @foreach (var player in _players)
-            {
-                <li>@player.Name</li>
-            }
-        </ul>
+    <div class="row align-items-center">
+        <div class="col">
+            <h4>Players:</h4>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-success" @onclick="() =>ChoosePlayerModal.Open()">Add Players</button>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary ml-2" @onclick="() =>CreateNewPlayerModal.Open()">Create New Player</button>
+        </div>
     </div>
-}
+    <ul>
+        @foreach (var player in _playersInGame)
+        {
+            <li>@player.Name</li>
+        }
+    </ul>
+</div>
+<button class="btn btn-primary mt-2" @onclick="StartGame" disabled="@(_playersInGame.Count == 0)">Start Game</button>
 
-<button class="btn btn-primary mt-2" @onclick="StartGame">StartGame</button>
+
+
+<ChoosePlayer @ref="ChoosePlayerModal" Players="PlayerService.Players" PlayersInGame="_playersInGame" Parent="@this"></ChoosePlayer>
+<CreateNewPlayer @ref="CreateNewPlayerModal" PlayerService="PlayerService"></CreateNewPlayer>
+
 
 @code {
-    private int _gamePoints;
-    private string _currentPlayerName = string.Empty;
-    private readonly List<Player> _players = [];
+    private ChoosePlayer ChoosePlayerModal { get; set; }
+    private CreateNewPlayer CreateNewPlayerModal { get; set; }
+    private int _gamePoints = 301;
+    private readonly List<Player> _playersInGame = [];
 
-    void AddPlayer()
+    protected override async Task OnInitializedAsync()
     {
-        if (string.IsNullOrWhiteSpace(_currentPlayerName))
-            return;
-        _players.Add(new Player(_currentPlayerName));
-        _currentPlayerName = string.Empty;
+        await PlayerService.GetPlayers();
     }
+
+    public void RefreshState()
+    {
+        StateHasChanged();
+    }
+
+    private void SelectGameMode(int gamePoints)
+    {
+        _gamePoints = gamePoints;
+    }
+
     async Task StartGame()
     {
-        await GameService.InitializeGame(_players, _gamePoints);
+        await GameService.InitializeGame(_playersInGame, _gamePoints);
+        _playersInGame.Clear();
         NavigationManager.NavigateTo("/game");
     }
 

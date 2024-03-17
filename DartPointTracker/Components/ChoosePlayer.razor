@@ -1,0 +1,79 @@
+@using DartPointTracker.Models
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Players:</h5>
+            </div>
+            <div class="modal-body">
+                <div class="player-list">
+                    @foreach (var player in _playersToSelect)
+                    {
+                        <div class="player-item @(player.Selected ? "selected" : "")" @onclick="() => SelectPlayer(player)">
+                            @player.Name
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  @onclick="Close">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+    [Parameter]
+    public required Pages.Index Parent { get; set; }
+    [Parameter]
+    public required List<Player> Players { get; set; }
+
+    [Parameter]
+    public required List<Player> PlayersInGame { get; set; }
+
+    private List<Player> _playersToSelect = [];
+    private Task SelectPlayer(Player player)
+    {
+        player.Selected = !player.Selected;
+        if(player.Selected)
+        {
+            PlayersInGame.Add(player);
+        }
+        else
+        {
+            PlayersInGame.Remove(player);
+        }
+        return Task.CompletedTask;
+    }
+
+    public Guid Guid = Guid.NewGuid();
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        _playersToSelect = Players.Where(c=> !PlayersInGame.Contains(c)).ToList();
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+        Parent.RefreshState();
+    }
+}

@@ -1,0 +1,62 @@
+﻿@page "/ranking"
+@using DartPointTracker.Models
+@inject IPlayerService PlayerService
+<PageTitle>Ranking</PageTitle>
+
+<h3>Player Ranking</h3>
+
+@if (RankedPlayers != null && RankedPlayers.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Elo Ranking Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var player in RankedPlayers)
+        {
+            <tr style="@(GetRowStyle(player))">
+                <td>@player.Rank</td>
+                <td>@player.Name</td>
+                <td>@player.EloRankingScore</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No players available.</p>
+}
+
+@code {
+
+    private List<Player> RankedPlayers { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        RankedPlayers = PlayerService.Players.OrderByDescending(p => p.EloRankingScore).ToList();
+
+        for (int i = 0; i < RankedPlayers.Count; i++)
+        {
+            RankedPlayers[i].Rank = i + 1;
+        }
+    }
+    private string GetRowStyle(Player player)
+    {
+        if (player.Rank == 1)
+        {
+            return "background-color: green;";
+        }
+
+        if (player.Rank is 2 or 3)
+        {
+            return "background-color: orange;";
+        }
+
+        return "";
+    }
+}

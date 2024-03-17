@@ -32,6 +32,40 @@ a, .btn-link {
     outline: 1px solid red;
 }
 
+.player-list {
+    display: flex;
+    flex-direction: column; /* Change to column */
+    gap: 5px; /* Add gap between rectangles */
+}
+
+.player-item {
+    height: 50px;
+    border: 2px solid #ccc;
+    padding: 10px;
+    background-color: lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.game-mode-container {
+    display: flex;
+    gap: 10px;
+}
+
+.game-mode {
+    background-color: lightgray;
+    border: 2px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.selected {
+    background-color: green;
+    color: white;
+}
+
 .circle {
     width: 40px; /* Adjust the width as needed */
     height: 40px; /* Adjust the height as needed */
@@ -42,6 +76,9 @@ a, .btn-link {
     border-radius: 50%;
     background: #09f;
     margin-right: 10px; /* Add space between circles */
+}
+.place-holder {
+    color: grey;
 }
 
 .players-wrapper{

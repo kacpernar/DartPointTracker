@@ -1,0 +1,79 @@
+@using DartPointTracker.Models
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Players:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="playerName">Player Name:</label>
+                    <input type="text" class="form-control" id="playerName" @bind="newPlayerName" />
+                </div>
+                <div class="alert alert-success" role="alert" style="display: @(isSuccess ? "block" : "none")">
+                    Player added successfully!
+                </div>
+                <div class="alert alert-danger" role="alert" style="display: @(isFailed ? "block" : "none")">
+                    Failed to add player. Please try again.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="AddNewPlayer">Add Player</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+
+    [Parameter]
+    public required IPlayerService PlayerService { get; set; }
+
+    bool isSuccess;
+    bool isFailed;
+    string newPlayerName;
+    private async Task AddNewPlayer()
+    {
+        isSuccess = await PlayerService.CreatePlayer(newPlayerName);
+        if (isSuccess)
+        {
+            newPlayerName = "";
+        }
+        else
+        {
+            isFailed = true;
+        }
+    }
+
+    public Guid Guid = Guid.NewGuid();
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+}

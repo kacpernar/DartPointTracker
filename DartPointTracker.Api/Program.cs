@@ -8,6 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GameDbContext>();
+builder.Services.AddCors(policy =>
+{
+    policy.AddPolicy("CorsPolicy", opt => opt
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -18,7 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("CorsPolicy");
 
 app.MapPost("/Game", ([FromServices] GameDbContext gameDbContext, List<PlayerDto> players) =>
     {

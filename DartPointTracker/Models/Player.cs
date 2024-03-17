@@ -2,7 +2,7 @@ namespace DartPointTracker.Models;
 
 public class Player(string name)
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; set; }
     public string Name { get; set; } = name;
     public int Score { get; set; }
     public List<Throw> DartThrows { get; set; } = [];
@@ -12,9 +12,13 @@ public class Player(string name)
     public int ThrowNumberInGameAtWin { get; set; }
     public bool Won { get; set; }
     private bool LastRoundOverThrow { get; set; }
+    public int EloRankingScore { get; set; }
+    public int Rank { get; set; }
 
 
     public int CurrentRoundThrowNumber => CurrentThrowNumber % 3;
+
+    public bool Selected { get; set; }
     public void StartNewRound()
     {
         CurrentRoundThrows = [null, null, null];

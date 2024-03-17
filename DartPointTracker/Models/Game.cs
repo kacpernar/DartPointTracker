@@ -11,7 +11,7 @@ public class Game
             player.Score = gamePoints;
         }
 
-        Players = players;
+        Players = new List<Player>(players);
         CurrentPlayer = players[0];
     }
 
