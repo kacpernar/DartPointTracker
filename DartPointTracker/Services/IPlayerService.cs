@@ -5,7 +5,7 @@ namespace DartPointTracker;
 public interface IPlayerService
 {
     Task GetPlayers();
-    Task<bool> CreatePlayer(string name);
+    Task<string?> CreatePlayer(string? name);
     List<Player> Players { get; set; }
     Task SendGame(Game game);
 }

@@ -21,20 +21,32 @@ public class PlayerService : IPlayerService
         _jsRuntime = jsRuntime;
     }
 
-    public async Task<bool> CreatePlayer(string name)
+    public async Task<string?> CreatePlayer(string? name)
     {
-        var response = await _httpClient.PostAsync("/Player?playerName=" + name, null);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var player = await response.Content.ReadFromJsonAsync<Player>();
-            if (player != null)
+            if (name == null)
             {
-                Players.Add(player);
-                await CachePlayers(Players);
-                return true;
+                return "Name cannot be empty";
             }
+            var response = await _httpClient.PostAsync("/Player?playerName=" + name, null);
+            if (response.IsSuccessStatusCode)
+            {
+                var player = await response.Content.ReadFromJsonAsync<Player>();
+                if (player != null)
+                {
+                    Players.Add(player);
+                    await CachePlayers(Players);
+                    return null;
+                }
+            }
+            return "Player with this name already exists";
         }
-        return false;
+        catch (Exception)
+        {
+            return "Check your internet connection and try again.";
+        }
+
     }
 
     public async Task GetPlayers()

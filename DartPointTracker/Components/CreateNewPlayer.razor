@@ -11,13 +11,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="playerName">Player Name:</label>
-                    <input type="text" class="form-control" id="playerName" @bind="newPlayerName" />
+                    <input type="text" class="form-control" id="playerName" @bind="_newPlayerName" />
                 </div>
-                <div class="alert alert-success" role="alert" style="display: @(isSuccess ? "block" : "none")">
+                <div class="alert alert-success" role="alert" style="display: @(_isSuccess ? "block" : "none")">
                     Player added successfully!
                 </div>
-                <div class="alert alert-danger" role="alert" style="display: @(isFailed ? "block" : "none")">
-                    Failed to add player. Please try again.
+                <div class="alert alert-danger" role="alert" style="display: @(_isFailed ? "block" : "none")">
+                    @_message
                 </div>
             </div>
             <div class="modal-footer">
@@ -40,23 +40,26 @@
     [Parameter]
     public required IPlayerService PlayerService { get; set; }
 
-    bool isSuccess;
-    bool isFailed;
-    string newPlayerName;
+    bool _isSuccess;
+    bool _isFailed;
+    string? _newPlayerName;
+    string? _message;
     private async Task AddNewPlayer()
     {
-        isSuccess = await PlayerService.CreatePlayer(newPlayerName);
-        if (isSuccess)
+        _message = await PlayerService.CreatePlayer(_newPlayerName);
+        if (string.IsNullOrEmpty(_message))
         {
-            newPlayerName = "";
+            _newPlayerName = "";
+            _isFailed = false;
+            _isSuccess = true;
         }
         else
         {
-            isFailed = true;
+            _isSuccess = false;
+            _isFailed = true;
         }
     }
 
-    public Guid Guid = Guid.NewGuid();
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop = false;
