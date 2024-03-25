@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using DartPointTracker.Dtos;
 using DartPointTracker.Models;
 using Microsoft.JSInterop;
 
@@ -12,7 +13,7 @@ public class PlayerService : IPlayerService
     private readonly IJSRuntime _jsRuntime;
 
 
-    public List<Player> Players { get; set; } = new List<Player>();
+    public List<Player> Players { get; set; } = new();
 
     public PlayerService(HttpClient httpClient, IJSRuntime jsRuntime)
     {
@@ -53,19 +54,6 @@ public class PlayerService : IPlayerService
             }
         }
     }
-    public static List<Player> GetRanking(List<Player> players)
-    {
-        // Order players by descending EloRankingScore
-        var rankedPlayers = players.OrderByDescending(p => p.EloRankingScore).ToList();
-
-        // Assign ranking based on the order
-        for (int i = 0; i < rankedPlayers.Count; i++)
-        {
-            rankedPlayers[i].Rank = i + 1;
-        }
-
-        return rankedPlayers;
-    }
 
     private async Task<List<Player>?> FetchPlayersFromApi()
     {
@@ -77,6 +65,24 @@ public class PlayerService : IPlayerService
         {
             Console.WriteLine($"Failed to fetch players from API: {ex.Message}");
             return null;
+        }
+    }
+
+    public async Task SendGame(Game game)
+    {
+        try
+        {
+            var playerList = game.Ranking.
+                Select(player => new PlayerDto(Id: player.Id, Place: game.Ranking.IndexOf(player) + 1)).ToList();
+            var responseMessage = await _httpClient.PostAsJsonAsync("/Game", playerList);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                game.GameSended = true;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Failed to send game to API: {ex.Message}");
         }
     }
 

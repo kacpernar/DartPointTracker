@@ -2,40 +2,59 @@
 @using DartPointTracker.Services
 @using DartPointTracker.Components
 @inject IGameService GameService
+@inject IPlayerService PlayerService
 @inject NavigationManager NavigationManager
 
 @if (GameService.CurrentGame is not null)
 {
-    <div class="players-wrapper">
-        @foreach (var player in GameService.CurrentGame.Players)
-        {
-            <div class="player-info @(player.Id == GameService.CurrentGame.CurrentPlayer.Id ? "active-player" : "inactive-player")">
-                <div>@player.Name: @player.Score</div>
-
-                <div class="input-group">
-
-                    @if (player.Won)
-                    {
-                        <h1>Won</h1>
-                    }
-                    else
-                    {
-                        <div class="circle-container">
-                            @foreach (var dartThrow in player.CurrentRoundThrows)
-                            {
-                                <div class="circle">@dartThrow</div>
-                            }
-                        </div>
-                    }
-                </div>
+    if (GameService.CurrentGame.IsFinished)
+    {
+        <div class="container">
+            <Summary Game="GameService.CurrentGame"></Summary>
+            <div>
+                <button class="btn purple-form" disabled="@GameService.CurrentGame.GameSended" @onclick="SendGame">
+                    <span class="bi bi-file-arrow-up"></span>
+                    Save Game
+                </button>
+                <button class="btn btn-light-purple" @onclick="GoToRanking">
+                    <span class="bi bi-trophy"></span>
+                    Ranking
+                </button>
             </div>
-        }
-    </div>
 
+        </div>
+    }
+    else
+    {
+        <div class="players-wrapper">
+            @foreach (var player in GameService.CurrentGame.Players)
+            {
+                <div class="player-info @(player.Id == GameService.CurrentGame.CurrentPlayer.Id ? "active-player" : "inactive-player")">
+                    <div>@player.Name: @player.Score</div>
 
-    <ChoosePointComponent
-        OnButtonClick="AddDartThrow"
-        OnBackClick="HandleBackClick"/>
+                    <div class="input-group">
+
+                        @if (player.Won)
+                        {
+                            <h1>Won</h1>
+                        }
+                        else
+                        {
+                            <div class="circle-container">
+                                @foreach (var dartThrow in player.CurrentRoundThrows)
+                                {
+                                    <div class="circle">@dartThrow</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <ChoosePointComponent
+            OnButtonClick="AddDartThrow"
+            OnBackClick="HandleBackClick"/>
+    }
 }
 
 
@@ -46,15 +65,22 @@
     {
         _dartThrow = value;
         GameService.CurrentGame.AddDartThrow(_dartThrow);
-        if (GameService.CurrentGame.IsFinished)
-        {
-            NavigationManager.NavigateTo("/summary");
-        }
     }
 
     private void HandleBackClick()
     {
         GameService.CurrentGame.RemoveLastDartThrow();
+    }
+
+    private async Task SendGame()
+    {
+        await PlayerService.SendGame(GameService.CurrentGame);
+    }
+
+    private Task GoToRanking()
+    {
+        NavigationManager.NavigateTo("/ranking");
+        return Task.CompletedTask;
     }
 
 }
