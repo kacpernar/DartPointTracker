@@ -6,38 +6,59 @@
 @inject IPlayerService PlayerService
 @inject NavigationManager NavigationManager
 
-<div class="mb-3">
-    <label class="form-label">Select Game Mode:</label>
-    <div class="game-mode-container">
-        @foreach (var gamePoints in GameSettings.GamePoints)
-        {
-            <button class="game-mode @(gamePoints == _gamePoints ? "selected" : "")" @onclick="() => SelectGameMode(gamePoints)">@gamePoints</button>
-        }
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="mb-3 text-center">
+                GAME MODE
+            </div>
+            <div class="mb-3 d-flex justify-content-center game-mode-container">
+                @foreach (var gamePoints in GameSettings.GamePoints)
+                {
+                    <button class="item @(gamePoints == _gamePoints ? "purple-form" : "")" @onclick="() => SelectGameMode(gamePoints)">@gamePoints</button>
+                }
+            </div>
+
+            <div class="mb-3 text-center">
+                PLAYERS
+            </div>
+
+            <div class="mb-3">
+
+                <div class="player-list">
+                    @foreach (var player in _playersInGame)
+                    {
+                        <div class="player-container">
+                            <span class="bi bi-person"></span>
+                            <span class="player-name">@player.Name</span>
+                            <div class="trash btn-grey">
+                                <span class="bi bi-trash"></span>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+
+                <div class="col-auto">
+                    <button class="btn purple-form" @onclick="() => ChoosePlayerModal.Open()">
+                        <span class="bi bi-person-plus"></span>
+                        Add Players
+                    </button>
+                    <button class="btn btn-light-purple" @onclick="() => CreateNewPlayerModal.Open()">
+                        <span class="bi bi-person-plus"></span>
+                        Create New Player
+                    </button>
+                </div>
+
+            </div>
+            <button class="btn start mt-2" @onclick="StartGame" disabled="@(_playersInGame.Count == 0)">
+                <span class="bi bi-play"></span>
+                Start Game
+            </button>
+        </div>
     </div>
 </div>
-
-
-<div class="mb-3">
-    <div class="row align-items-center">
-        <div class="col">
-            <h4>Players:</h4>
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-success" @onclick="() =>ChoosePlayerModal.Open()">Add Players</button>
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-primary ml-2" @onclick="() =>CreateNewPlayerModal.Open()">Create New Player</button>
-        </div>
-    </div>
-    <ul>
-        @foreach (var player in _playersInGame)
-        {
-            <li>@player.Name</li>
-        }
-    </ul>
-</div>
-<button class="btn btn-primary mt-2" @onclick="StartGame" disabled="@(_playersInGame.Count == 0)">Start Game</button>
-
 
 
 <ChoosePlayer @ref="ChoosePlayerModal" Players="PlayerService.Players" PlayersInGame="_playersInGame" Parent="@this"></ChoosePlayer>

@@ -29,7 +29,28 @@ a, .btn-link {
 }
 
 .invalid {
-    outline: 1px solid red;
+    outline: 1px solid darkred;
+}
+.player-container {
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Distribute items evenly */
+    align-items: center; /* Center items vertically */
+    width: 100%; /* Fill available space */
+    gap: 5px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #aeb5cd;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+.player-container .bi {
+    margin: 5px;
+}
+
+.player-name {
+    flex-grow: 1; /* Allow player name to grow and fill remaining space */
+    margin-right: 10px; /* Add some margin between name and icon */
 }
 
 .player-list {
@@ -37,33 +58,80 @@ a, .btn-link {
     flex-direction: column; /* Change to column */
     gap: 5px; /* Add gap between rectangles */
 }
-
+.text-center{
+    color: midnightblue;
+    font-weight: bold;
+}
 .player-item {
     height: 50px;
-    border: 2px solid #ccc;
-    padding: 10px;
-    background-color: lightgray;
+    font-size: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-}
 
+}
+.item {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #aeb5cd;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.item.selected {
+    background-color: #4d297a;
+}
+.item:hover {
+    background-color: #5a6268;
+}
+.container {
+    font-size: 24px;
+    padding: 20px;
+}
+.game-mode-container button {
+    padding: 10px 20px;
+}
 .game-mode-container {
     display: flex;
+    justify-content: center;
     gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
 }
 
-.game-mode {
-    background-color: lightgray;
-    border: 2px solid #ccc;
-    padding: 10px;
-    cursor: pointer;
+.no-hover {
+    pointer-events: none;
+    cursor: default;
+}
+.purple-form {
+    background-color: #50487b;
+    color: #fff;
+}
+.start{
+    background-color: #29165f;
+    color: #fff;
+    margin-top: 2.5rem;
+}
+.start:disabled {
+    background-color: #aeb5cd;
+    color: #fff;
+}
+.btn-light-purple{
+    color: #fff;
+    background-color: #7072bb;
 }
 
-.selected {
-    background-color: green;
-    color: white;
+.trash{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+.btn {
+    font-size: 24px; /* Increase font size of buttons */
+    padding: 10px 20px; /* Increase padding of buttons */
 }
 
 .circle {
@@ -74,7 +142,7 @@ a, .btn-link {
     text-align: center;
     line-height: 40px; /* Center content vertically */
     border-radius: 50%;
-    background: #09f;
+    background: #aeb5cd;
     margin-right: 10px; /* Add space between circles */
 }
 .place-holder {
@@ -84,20 +152,21 @@ a, .btn-link {
 .players-wrapper{
     flex-direction: row;
     flex-wrap: wrap;
-    display: flex; /* Use flexbox for horizontal layout */
-
+    display: flex;
+    margin-bottom: 3rem;
+    margin-top: 1rem;
 }
 .player-info{
     /*background: lightblue;*/
-
+    margin-bottom: 10px;
     padding: 10px;
     flex: 1;
 }
 .active-player{
-    border-left: 10px greenyellow solid;
+    border-left: 10px blueviolet solid;
 }
 .inactive-player{
-    border-left: 10px red solid;
+    border-left: 10px gray solid;
 }
 .circle-container {
     display: flex; /* Use flexbox for horizontal layout */
@@ -123,6 +192,15 @@ a, .btn-link {
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 8px;
 }
+.btn-point {
+    padding: 10px;
+    font-size: 24px;
+    background-color: #aeb5cd;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 .btn {
     width: 100%;
@@ -132,7 +210,10 @@ a, .btn-link {
 .validation-message {
     color: red;
 }
-
+.btn-grey{
+    background-color: #797373;
+    color: #fff;
+}
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

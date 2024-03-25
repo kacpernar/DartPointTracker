@@ -38,6 +38,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await PlayerService.GetPlayers();
         RankedPlayers = PlayerService.Players.OrderByDescending(p => p.EloRankingScore).ToList();
 
         for (int i = 0; i < RankedPlayers.Count; i++)

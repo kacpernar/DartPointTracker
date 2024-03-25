@@ -9,14 +9,14 @@
                 <div class="player-list">
                     @foreach (var player in _playersToSelect)
                     {
-                        <div class="player-item @(player.Selected ? "selected" : "")" @onclick="() => SelectPlayer(player)">
+                        <div class="player-item item @(player.Selected ? "purple-form" : "")" @onclick="() => SelectPlayer(player)">
                             @player.Name
                         </div>
                     }
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  @onclick="Close">Add</button>
+                <button type="button" class="btn purple-form"  @onclick="Close">Add</button>
             </div>
         </div>
     </div>

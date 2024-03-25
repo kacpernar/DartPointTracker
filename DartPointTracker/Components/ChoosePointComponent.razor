@@ -2,13 +2,13 @@
 <div class="number-pad">
     @foreach (var number in _numbers)
     {
-        <button class="btn btn-primary" @onclick="() => ButtonClick(number)">@number</button>
+        <button class="btn btn-point" @onclick="() => ButtonClick(number)">@number</button>
     }
-    <button class="btn btn-primary" @onclick="() =>ButtonClick(Bullseye)">@Bullseye</button>
-    <button class="btn btn-primary" @onclick="DoubleClick">Double</button>
-    <button class="btn btn-primary" @onclick="TripleClick">Triple</button>
+    <button class="btn btn-point" @onclick="() =>ButtonClick(Bullseye)" disabled="@_tripleClicked">@Bullseye</button>
+    <button class="btn btn-light-purple" @onclick="DoubleClick">x2</button>
+    <button class="btn btn-primary" @onclick="TripleClick">x3</button>
 </div>
-<button class="btn btn-danger" @onclick="BackClick">Back</button>
+<button class="btn btn-grey" @onclick="BackClick">Back</button>
 
 @code {
     private readonly List<int> _numbers = Enumerable.Range(0, 21).ToList(); // Numbers 0 to 20
