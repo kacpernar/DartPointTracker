@@ -101,10 +101,6 @@ a, .btn-link {
     margin-top: 20px;
 }
 
-.no-hover {
-    pointer-events: none;
-    cursor: default;
-}
 .purple-form {
     background-color: #50487b;
     color: #fff;
@@ -132,6 +128,8 @@ a, .btn-link {
 .btn {
     font-size: 24px; /* Increase font size of buttons */
     padding: 10px 20px; /* Increase padding of buttons */
+    width: 100%;
+    margin-top: 8px;
 }
 
 .circle {
@@ -200,11 +198,6 @@ a, .btn-link {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.btn {
-    width: 100%;
-    margin-top: 8px;
 }
 
 .validation-message {
