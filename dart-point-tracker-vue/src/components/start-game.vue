@@ -62,12 +62,6 @@
     font-size: 24px;
     padding: 20px;
 }
-.btn {
-    font-size: 24px; 
-    padding: 10px 20px; 
-    width: 100%;
-    margin-top: 8px;
-}
 
 .game-mode-container button {
     padding: 10px 20px;
@@ -95,10 +89,7 @@
     background-color: #aeb5cd;
     color: #fff;
 }
-.btn-light-purple{
-    color: #fff;
-    background-color: #7072bb;
-}
+
 .player-container {
     display: flex; /* Use flexbox */
     justify-content: space-between; /* Distribute items evenly */
@@ -132,10 +123,7 @@
     align-items: center;
     border-radius: 5px;
 }
-.btn-grey{
-    background-color: #797373;
-    color: #fff;
-}
+
 .item {
     padding: 10px 20px;
     border-radius: 5px;

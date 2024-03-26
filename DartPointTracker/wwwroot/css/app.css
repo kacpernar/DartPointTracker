@@ -143,9 +143,6 @@ a, .btn-link {
     background: #aeb5cd;
     margin-right: 10px; /* Add space between circles */
 }
-.place-holder {
-    color: grey;
-}
 
 .players-wrapper{
     flex-direction: row;
@@ -155,7 +152,6 @@ a, .btn-link {
     margin-top: 1rem;
 }
 .player-info{
-    /*background: lightblue;*/
     margin-bottom: 10px;
     padding: 10px;
     flex: 1;

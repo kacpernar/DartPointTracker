@@ -20,4 +20,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
+.btn {
+    font-size: 24px; 
+    padding: 10px 20px; 
+    width: 100%;
+    margin-top: 8px;
+}
+.btn-light-purple{
+    color: #fff;
+    background-color: #7072bb;
+}
+.btn-grey{
+    background-color: #797373;
+    color: #fff;
+}
 </style>
