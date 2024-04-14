@@ -139,4 +139,8 @@
 .item:hover {
     background-color: #5a6268;
 }
+.btn-light-purple{
+    color: #fff;
+    background-color: #7072bb;
+}
 </style>

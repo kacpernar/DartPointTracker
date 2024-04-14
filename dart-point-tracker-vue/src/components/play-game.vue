@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-  <ChoosePoint @score="addDartThrow"/>
+  <ChoosePoint @score="addDartThrow" @back="removeLastThrow"/>
   </div>
 </template>
     
@@ -72,12 +72,12 @@ const nextPlayer = () => {
   }
   currentGame.value.currentPlayer = nextPlayer;
   currentGame.value.currentPlayer.currentRoundThrows = [null, null, null];
-  currentGame.value.currentPlayer.throwNumber++;
 };
 
 const addDartThrowToPlayer = (player, points) => {
   player.currentRoundThrows[player.throwNumber % 3] = points;
   player.dartThrows.push({ number: player.throwNumber, points: points });
+  player.throwNumber++;
   player.score -= points;
   switch (player.score) {
     case player.score < 0:
@@ -91,6 +91,61 @@ const addDartThrowToPlayer = (player, points) => {
   return [true, player.throwNumber % 3];
 };
 
+const removeLastThrow = () => {
+  if(currentGame.value.totalThrows > 0){
+    currentGame.value.totalThrows--;
+  }
+  else{
+    return;
+  }
+  const currentPlayer = currentGame.value.currentPlayer;
+  if(currentPlayer.currentRoundThrowNumber === 0){
+    reloadPreviousRound(currentPlayer);
+    previousPlayer(currentGame.value);
+  }
+  while (currentPlayer.won) {
+    if(currentPlayer.throwNumberInGameAtWin === currentGame.value.totalThrows + 1){
+      currentPlayer.won = false;
+      break;
+    }
+    previousPlayer(currentGame.value.players, currentPlayer);
+  }
+  removeLastDartThrow(currentPlayer);
+
+}
+const previousPlayer = (players, currentPlayer) => {
+    const index = players.value.indexOf(currentPlayer.value);
+    currentPlayer.value = index === 0 ? players.value[players.value.length - 1] : players.value[index - 1];
+  }
+
+const reloadPreviousRound = (player) => {
+    if(player.throwNumber < 3){
+      return;
+    }
+    else{
+      player.currentRoundThrows[0] = player.dartThrows[player.dartThrows.length - 3].points;
+      player.currentRoundThrows[1] = player.dartThrows[player.dartThrows.length - 2].points;
+      player.currentRoundThrows[2] = player.dartThrows[player.dartThrows.length - 1].points;
+    }
+}
+
+const removeLastDartThrow = (player) => {
+  if (player.throwNumber === 0) {
+    return;
+  }
+
+  const lastThrow = player.dartThrows[player.dartThrows.length - 1];
+  player.dartThrows.pop();
+  player.throwNumber--;
+  player.currentRoundThrows[player.throwNumber % 3] = null;
+
+  if (player.lastRoundOverThrow) {
+    player.score += player.currentRoundThrows.reduce((acc, curr) => acc + (curr || 0), 0);
+    player.lastRoundOverThrow = false;
+  } else {
+    player.score += lastThrow.points;
+  }
+};
   </script>
   
   
@@ -130,6 +185,10 @@ const addDartThrowToPlayer = (player, points) => {
 }
 .inactive-player{
     border-left: 10px gray solid;
+}
+.btn-light-purple{
+    color: #fff;
+    background-color: #7072bb;
 }
 </style>
   

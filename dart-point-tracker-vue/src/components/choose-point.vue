@@ -5,13 +5,13 @@
       <button class="btn btn-light-purple" @click="doubleClick">x2</button>
       <button class="btn btn-primary" @click="tripleClick">x3</button>
     </div>
-    <button class="btn btn-grey" >Back</button>
+    <button class="btn btn-grey" @click="backClick">Back</button>
   </template>
   
   <script setup>
   import { ref, defineEmits } from 'vue';
   
-  const emit = defineEmits(['score']);
+  const emit = defineEmits(['score', 'back']);
   const numbers = Array.from(Array(21).keys()); // Numbers 0 to 20
   const bullseye = 25;
   let doubleClicked = ref(false);
@@ -25,7 +25,9 @@
         emit('score', value * 3)
       tripleClicked.value = false;
     }
-    emit('score', value)
+    else{
+        emit('score', value)
+    }
   };
   
   const doubleClick = () => {
@@ -37,6 +39,11 @@
     doubleClicked.value = false;
     tripleClicked.value = true;
   };
+
+  const backClick = () => {
+    emit('back')
+  }
+  
   
   </script>
   
@@ -54,6 +61,14 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+.btn-light-purple{
+    color: #fff;
+    background-color: #7072bb;
+}
+.btn-grey{
+    background-color: #797373;
+    color: #fff;
 }
   </style>
   
