@@ -1,37 +1,26 @@
 import Player from './player'; 
 
-interface IGame {
-    gameId: string;
-    gamePoints: number;
-    players: Player[];
-    ranking: Player[];
-    currentPlayer: Player;
-    isFinished: boolean;
-    gameEnded: boolean;
-    addDartThrow(points: number): void;
-    removeLastDartThrow(): void;
-    }
-
-class Game implements IGame{
+class Game {
   gameId: string;
   gamePoints: number;
   players: Player[];
-  ranking: Player[] = [];
+  ranking: Player[];
   currentPlayer: Player;
   isFinished: boolean;
-  gameEnded: boolean;
+  gameSaved: boolean;
   private totalThrows: number;
 
   constructor(players: Player[], gamePoints: number) {
-    this.gameId = crypto.randomUUID(); 
+    this.gameId = (<any>crypto).randomUUID(); 
     this.gamePoints = gamePoints;
     this.players = players.map(player => {
       player.score = gamePoints;
       return player;
     });
+    this.ranking = [];
     this.currentPlayer = players[0];
     this.isFinished = false;
-    this.gameEnded = false;
+    this.gameSaved = false;
     this.totalThrows = 0;
   }
 

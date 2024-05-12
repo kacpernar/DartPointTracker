@@ -89,7 +89,7 @@ public class PlayerService : IPlayerService
             var responseMessage = await _httpClient.PostAsJsonAsync("/Game", playerList);
             if (responseMessage.IsSuccessStatusCode)
             {
-                game.GameSended = true;
+                game.GameSaved = true;
             }
         }
         catch (HttpRequestException ex)

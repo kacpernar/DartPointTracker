@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import StartGame from '../views/start-game.vue'
+import playerRanking from '@/views/player-ranking.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,7 +15,13 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/play-game.vue')
+  },
+  {
+    path: '/ranking',
+    name: 'ranking',
+    component: playerRanking
   }
+
 ]
 
 const router = createRouter({

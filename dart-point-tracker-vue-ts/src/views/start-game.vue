@@ -36,7 +36,7 @@
                     </div>
 
                 </div>
-                <button class="btn start mt-2" @onclick="StartGame" :disabled="playersInGame.length === 0">
+                <button class="btn start mt-2" @click="StartGame()" :disabled="playersInGame.length === 0">
                     <span class="bi bi-play"></span>
                     Start Game
                 </button>
@@ -49,26 +49,36 @@
 <script lang="ts">
 
 import { ref, defineComponent } from 'vue';
+import { useGameStore } from '../stores/gameStore';
+import { useRouter } from 'vue-router';
+import Player from '../models/player';
 
 export default defineComponent({
     name: 'StartGame',
     setup() {
         var selectedGamePoints = ref(301)
 
-        var playersInGame = ref([{ id: 1, name: 'Player 1' }, { id: 2, name: 'Player 2' }])
+        const router = useRouter();
+        const gameStore = useGameStore();
+
+        var playersInGame: Player[] = [
+            new Player('Player XD'),
+            new Player('Player 2')
+        ]
         const gameSettings = [101, 201, 301, 401, 501]
 
-        return { selectedGamePoints, playersInGame, gameSettings }
-    },
-    methods: {
-        selectGameMode(gamePoints: number) {
-            this.selectedGamePoints = gamePoints
-        },
-        StartGame() {
-            console.log('Game Started')
+        function selectGameMode(gamePoints: number) {
+            selectedGamePoints.value = gamePoints
         }
+        function StartGame() {
+        
+            gameStore.InitializeGame(playersInGame, selectedGamePoints.value);
+            playersInGame = [];
+            router.push('/game');
+        }
+        return { selectedGamePoints, playersInGame, gameSettings, selectGameMode, StartGame }
     }
-    });
+});
 
 </script>
 

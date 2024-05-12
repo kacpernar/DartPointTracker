@@ -24,7 +24,7 @@ public class Game
     public Player CurrentPlayer { get; set; }
 
     public bool IsFinished { get; set; }
-    public bool GameSended { get; set; }
+    public bool GameSaved { get; set; }
 
     private int _totalThrows;
 
