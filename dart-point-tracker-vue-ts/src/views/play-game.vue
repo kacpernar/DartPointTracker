@@ -44,7 +44,7 @@
 <script lang="ts">
 import ChoosePoint from '../components/choose-point.vue';
 import GameSummary from '../components/game-summary.vue';
-import { ref, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import { useGameStore } from '../stores/gameStore';
 import { useRouter } from 'vue-router';
 

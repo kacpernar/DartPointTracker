@@ -9,7 +9,7 @@
   </template>
   
   <script lang="ts">
-  import { ref, defineEmits, defineComponent } from 'vue';
+  import { ref, defineComponent } from 'vue';
   
   export default defineComponent({
     name: 'ChoosePoint',

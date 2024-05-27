@@ -35,4 +35,25 @@ export default defineComponent({
     background-color: #797373;
     color: #fff;
 }
+.item {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #aeb5cd;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.item.selected {
+    background-color: #4d297a;
+}
+.item:hover {
+    background-color: #5a6268;
+}
+.purple-form {
+    background-color: #50487b;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+}
 </style>

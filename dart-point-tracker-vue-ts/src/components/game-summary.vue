@@ -26,7 +26,6 @@
 import Player from '@/models/player';
 import { defineComponent } from 'vue';
 import { type PropType } from 'vue'
-import Game from '../models/game';
 
 export default defineComponent({
 

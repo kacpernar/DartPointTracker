@@ -14,7 +14,9 @@ export const usePlayerStore = defineStore('player', {
         if (!name) {
           return 'Name cannot be empty';
         }
-        const response = await fetch(apiUrl + `/Player?playerName=${name}`);
+        const response = await fetch(apiUrl + `/Player?playerName=${name}`, {
+          method: 'POST'
+        });
         if (response.ok) {
           const player = await response.json() as Player;
           this.players.push(player);

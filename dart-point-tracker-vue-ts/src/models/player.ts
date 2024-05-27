@@ -1,5 +1,3 @@
-import { ref, computed } from 'vue';
-
 class Player {
   id: string;
   name: string;
