@@ -105,6 +105,9 @@ main {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
+    .content {
+    padding-top: 1.1rem;
+}
 }
 
   </style>

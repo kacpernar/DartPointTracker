@@ -29,7 +29,7 @@ export const usePlayerStore = defineStore('player', {
       }
     },
 
-    async getPlayers() {
+    async getPlayers(): Promise<Player[]>{
       try {
         let players = await this.fetchPlayersFromApi();
         if (!players || players.length === 0) {
@@ -39,8 +39,10 @@ export const usePlayerStore = defineStore('player', {
           this.players = players;
           await this.cachePlayers(this.players);
         }
+        return this.players;
       } catch (error) {
         console.error(`Failed to fetch or cache players: ${error}`);
+        return this.players;
       }
     },
 
@@ -73,7 +75,11 @@ export const usePlayerStore = defineStore('player', {
     async getCachedPlayers(): Promise<Player[] | null> {
       try {
         const playersJson = localStorage.getItem('players');
-        return playersJson ? JSON.parse(playersJson) : [];
+        if (playersJson) {
+          const parsedData = JSON.parse(playersJson);
+          return parsedData.map((playerData: any) => new Player(playerData.name, playerData.id, playerData.eloRankingScore));
+        }
+        return [];
       } catch (error) {
         console.error(`Failed to retrieve cached players: ${error}`);
         return null;
@@ -83,11 +89,16 @@ export const usePlayerStore = defineStore('player', {
     async fetchPlayersFromApi(): Promise<Player[] | null> {
       try {
         const response = await fetch(apiUrl + '/Players');
-        return response.ok ? await response.json() : null;
+        if (!response.ok) {
+          return null;
+        }
+        const data = await response.json();
+        return data.map((playerData: any) => new Player(playerData.name, playerData.id, playerData.eloRankingScore));
       } catch (error) {
         console.error(`Failed to fetch players from API: ${error}`);
         return null;
       }
     }
+    
   }
 });

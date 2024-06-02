@@ -1,7 +1,9 @@
 <template>
     <div class="container">
         <div class="row">
-            <h3>Player Ranking</h3>
+            <div class="mb-3 text-center">
+                PLAYER RANKING
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -11,8 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="player in rankedPlayers" :key="player.id"
-                        :style="{ backgroundColor: getRowStyle(player) }">
+                    <tr v-for="player in rankedPlayers" :key="player.id" :style="'background-color: ' + (getRowStyle(player))">
                         <td>{{ player.rank }}</td>
                         <td>{{ player.name }}</td>
                         <td>{{ player.eloRankingScore }}</td>
@@ -50,15 +51,15 @@ export default defineComponent({
                 });
         });
 
-        const getRowStyle = (player: Player) => {
+        function getRowStyle (player: Player) {
             if (player.rank === 1) {
-                return 'background-color: green;';
+                return 'green';
             }
             if (player.rank === 2 || player.rank === 3) {
-                return 'background-color: orange;';
+                return 'orange';
             }
             return '';
-        };
+        }
 
         return { rankedPlayers, getRowStyle };
     },
@@ -66,5 +67,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Add your component-specific styles here */
+
+
+
 </style>

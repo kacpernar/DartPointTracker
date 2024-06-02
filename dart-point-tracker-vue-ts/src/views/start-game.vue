@@ -17,10 +17,16 @@
                 <div class="mb-3">
                     <div class="player-list">
                         <div v-for="player in playersInGame" :key="player.id" class="player-container">
-                            <span class="bi bi-person"></span>
-                            <span class="player-name">{{ player.name }}</span>
-                            <div class="trash btn-grey">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                    class="bi bi-person-fill" viewBox="0 0 16 16">
+                                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                </svg>
+                                <span class="player-name">{{ player.name }}</span>
+                            </div>
+
+                            <div class="trash btn-grey" @click="excludePlayer(player)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                     class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                     <path
                                         d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
@@ -29,8 +35,8 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <button class="btn purple-form" @click="showChoosePlayerModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        <button class="btn btn-purple" @click="showChoosePlayerModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                 class="bi bi-person-fill-add" viewBox="0 0 16 16">
                                 <path
                                     d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -40,7 +46,7 @@
                             Add Players
                         </button>
                         <button class="btn btn-light-purple" @click="openAddPlayerModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                 class="bi bi-person-fill-add" viewBox="0 0 16 16">
                                 <path
                                     d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -53,7 +59,7 @@
 
                 </div>
                 <button class="btn start mt-2" @click="StartGame()" :disabled="playersInGame.length === 0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         class="bi bi-play-fill" viewBox="0 0 16 16">
                         <path
                             d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
@@ -92,8 +98,8 @@ export default defineComponent({
         const gameStore = useGameStore();
         const playerStore = usePlayerStore();
 
-        const players = playerStore.players;
         var selectedGamePoints = ref(301)
+        const players = ref<Player[]>([]);
         const playersInGame = ref<Player[]>([]);
 
         let choosePlayerModal = ref<Modal | null>(null);
@@ -112,12 +118,16 @@ export default defineComponent({
         }
 
         onMounted(async () => {
-            await playerStore.getPlayers();
+            players.value = await playerStore.getPlayers();
         });
 
         const modalShow = ref(false);
         function addSelectedPlayers(players: Player[]) {
             playersInGame.value = playersInGame.value.concat(players);
+        }
+        function excludePlayer(player: Player){
+            playersInGame.value.splice(playersInGame.value.indexOf(player), 1);
+            player.selected = false;
         }
 
 
@@ -133,7 +143,8 @@ export default defineComponent({
         }
         return {
             selectedGamePoints, playersInGame, gameSettings,
-            selectGameMode, StartGame, players, modalShow, showChoosePlayerModal, choosePlayerModal, addSelectedPlayers, openAddPlayerModal, addPlayerModal
+            selectGameMode, StartGame, players, modalShow, showChoosePlayerModal, choosePlayerModal, addSelectedPlayers, openAddPlayerModal, addPlayerModal, 
+            excludePlayer
         };
     }
 });

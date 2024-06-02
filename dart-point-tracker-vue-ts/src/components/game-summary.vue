@@ -1,6 +1,8 @@
 <template>
     <div>
-        <h3>Summary</h3>
+        <div class="mb-3 text-center">
+            SUMMARY
+        </div>
         <table>
             <thead>
                 <tr>

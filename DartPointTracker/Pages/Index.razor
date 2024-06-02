@@ -29,10 +29,19 @@
                     @foreach (var player in _playersInGame)
                     {
                         <div class="player-container">
-                            <span class="bi bi-person"></span>
-                            <span class="player-name">@player.Name</span>
-                            <div class="trash btn-grey">
-                                <span class="bi bi-trash"></span>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                </svg>
+                                <span class="player-name">@player.Name</span>
+                            </div>
+
+                            <div class="trash btn-grey" @onclick="() => ExcludePlayer(player)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                     class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                </svg>
                             </div>
                         </div>
                     }
@@ -42,18 +51,34 @@
 
                 <div class="col-auto">
                     <button class="btn purple-form" @onclick="() => ChoosePlayerModal.Open()">
-                        <span class="bi bi-person-plus"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                             class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                            <path
+                                d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                            <path
+                                d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                        </svg>
                         Add Players
                     </button>
                     <button class="btn btn-light-purple" @onclick="() => CreateNewPlayerModal.Open()">
-                        <span class="bi bi-person-plus"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                             class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                            <path
+                                d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                            <path
+                                d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                        </svg>
                         Create New Player
                     </button>
                 </div>
 
             </div>
             <button class="btn start mt-2" @onclick="StartGame" disabled="@(_playersInGame.Count == 0)">
-                <span class="bi bi-play"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                     class="bi bi-play-fill" viewBox="0 0 16 16">
+                    <path
+                        d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
+                </svg>
                 Start Game
             </button>
         </div>
@@ -61,7 +86,7 @@
 </div>
 
 
-<ChoosePlayer @ref="ChoosePlayerModal" Players="PlayerService.Players" PlayersInGame="_playersInGame" Parent="@this"></ChoosePlayer>
+<ChoosePlayer @ref="ChoosePlayerModal" PlayersToSelect="PlayersToSelect" OnAddPlayers="HandleAddPlayers" Parent="@this"></ChoosePlayer>
 <CreateNewPlayer @ref="CreateNewPlayerModal" PlayerService="PlayerService"></CreateNewPlayer>
 
 
@@ -70,6 +95,7 @@
     private CreateNewPlayer CreateNewPlayerModal { get; set; }
     private int _gamePoints = 301;
     private readonly List<Player> _playersInGame = [];
+    private List<Player> PlayersToSelect => PlayerService.Players.Where(p => !_playersInGame.Contains(p)).ToList();
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,6 +107,15 @@
         StateHasChanged();
     }
 
+    private void ExcludePlayer(Player player)
+    {
+        _playersInGame.Remove(player);
+        player.Selected = false;
+    }
+    private void HandleAddPlayers(List<Player> selectedPlayers)
+    {
+        _playersInGame.AddRange(selectedPlayers);
+    }
     private void SelectGameMode(int gamePoints)
     {
         _gamePoints = gamePoints;

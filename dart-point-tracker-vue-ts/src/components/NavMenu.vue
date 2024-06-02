@@ -30,7 +30,7 @@ export default defineComponent({
   <div class="nav-scrollable" :class="{ 'collapsed': collapseNavMenu }" @click="toggleNavMenu">
     <nav class="flex-column">
       <div class="nav-item px-3">
-        <router-link class="nav-link" :to="{ name: 'home' }">
+        <router-link class="nav-link" activeClass="active" :to="{ name: 'home' }">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-house-door-fill" viewBox="0 0 16 16">
             <path
@@ -40,7 +40,7 @@ export default defineComponent({
         </router-link>
       </div>
       <div class="nav-item px-3">
-        <router-link class="nav-link" :to="{ name: 'game' }">
+        <router-link class="nav-link" activeClass="active" :to="{ name: 'game' }">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-controller"
             viewBox="0 0 16 16">
             <path
@@ -52,7 +52,7 @@ export default defineComponent({
         </router-link>
       </div>
       <div class="nav-item px-3">
-        <router-link class="nav-link" :to="{ path: '/ranking' }">
+        <router-link class="nav-link" activeClass="active" :to="{ path: '/ranking' }">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trophy-fill"
             viewBox="0 0 16 16">
             <path
@@ -96,7 +96,9 @@ export default defineComponent({
 .nav-item:first-of-type {
   padding-top: 1rem;
 }
-
+.nav-link{
+  padding: .5rem 1rem;
+}
 .nav-item:last-of-type {
   padding-bottom: 1rem;
 }
@@ -110,7 +112,7 @@ export default defineComponent({
   line-height: 3rem;
 }
 
-.nav-item a.active {
+.active {
   background-color: rgba(255, 255, 255, 0.25);
   color: white;
 }

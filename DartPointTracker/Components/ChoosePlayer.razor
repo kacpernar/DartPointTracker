@@ -4,10 +4,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Select Players:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="ResetPlayersAndClose"></button>
             </div>
             <div class="modal-body">
                 <div class="player-list">
-                    @foreach (var player in _playersToSelect)
+                    @foreach (var player in PlayersToSelect)
                     {
                         <div class="player-item item @(player.Selected ? "purple-form" : "")" @onclick="() => SelectPlayer(player)">
                             @player.Name
@@ -16,7 +17,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn purple-form"  @onclick="Close">Add</button>
+                <button type="button" class="btn purple-form"  @onclick="AddPlayersAndClose">Add</button>
             </div>
         </div>
     </div>
@@ -33,28 +34,43 @@
 
     [Parameter]
     public required Pages.Index Parent { get; set; }
-    [Parameter]
-    public required List<Player> Players { get; set; }
 
     [Parameter]
-    public required List<Player> PlayersInGame { get; set; }
+    public required List<Player> PlayersToSelect { get; set; }
 
+    [Parameter]
+    public EventCallback<List<Player>> OnAddPlayers { get; set; }
+
+    private List<Player> _selectedPlayers = [];
     private List<Player> _playersToSelect = [];
-    private Task SelectPlayer(Player player)
+    private void SelectPlayer(Player player)
     {
         player.Selected = !player.Selected;
         if(player.Selected)
         {
-            PlayersInGame.Add(player);
+            _selectedPlayers.Add(player);
         }
         else
         {
-            PlayersInGame.Remove(player);
+            _selectedPlayers.Remove(player);
         }
-        return Task.CompletedTask;
+    }
+    private async Task AddPlayersAndClose()
+    {
+        await OnAddPlayers.InvokeAsync(_selectedPlayers);
+        _selectedPlayers = [];
+        Close();
+    }
+    private void ResetPlayersAndClose()
+    {
+        foreach (var player in PlayersToSelect)
+        {
+            player.Selected = false;
+        }
+        _selectedPlayers = [];
+        Close();
     }
 
-    public Guid Guid = Guid.NewGuid();
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop = false;
@@ -64,7 +80,6 @@
         ModalDisplay = "block;";
         ModalClass = "Show";
         ShowBackdrop = true;
-        _playersToSelect = Players.Where(c=> !PlayersInGame.Contains(c)).ToList();
         StateHasChanged();
     }
 

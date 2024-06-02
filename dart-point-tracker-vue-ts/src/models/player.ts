@@ -1,5 +1,5 @@
 class Player {
-  id: string;
+  id: string | undefined;
   name: string;
   score: number;
   dartThrows: { throwNumber: number; points: number }[];
@@ -11,8 +11,8 @@ class Player {
   rank: number;
   selected: boolean;
 
-  constructor(name: string) {
-    this.id = ''; // Initialize with appropriate value
+  constructor(name: string, id?: string, eloRankingScore?: number) {
+    this.id = id; // Initialize with appropriate value
     this.name = name;
     this.dartThrows = [];
     this.score = 0;
@@ -20,9 +20,9 @@ class Player {
     this.won = false;
     this.currentRoundThrows = [null, null, null]
     this.lastRoundOverThrow = false;
-    this.eloRankingScore = 0;
     this.rank = 0;
     this.selected = false;
+    this.eloRankingScore = eloRankingScore || 0;
   }
 
   get currentThrowNumber(): number {
@@ -33,7 +33,7 @@ class Player {
   }
 
   startNewRound(): void {
-    this.currentRoundThrows.forEach((throwRef) => (throwRef = null));
+    this.currentRoundThrows = [null, null, null];
   }
 
   addDartThrow(points: number): { validThrow: boolean; currentRoundThrowNumber: number } {
@@ -42,7 +42,7 @@ class Player {
     this.score -= points;
 
     if (this.score < 0) {
-      //this.score += this.currentRoundThrows.reduce((acc, currentThrow) => (currentThrow ? acc + currentThrow : acc), 0);
+      this.score += this.currentRoundThrows.filter((x): x is number => x !== null).reduce((acc, x) => acc + x, 0);
       this.lastRoundOverThrow = true;
       return { validThrow: false, currentRoundThrowNumber: this.currentRoundThrowNumber };
     } else if (this.score === 0) {
@@ -59,7 +59,7 @@ class Player {
     if (lastThrow) {
       this.currentRoundThrows[this.currentRoundThrowNumber] = null;
       if (this.lastRoundOverThrow) {
-        //this.score -= this.currentRoundThrows.reduce((acc, currentThrow) => (currentThrow ? acc + currentThrow : acc), 0);
+        this.score -= this.currentRoundThrows.filter((x): x is number => x !== null).reduce((acc, x) => acc + x, 0);
         this.lastRoundOverThrow = false;
       } else {
         this.score += lastThrow.points;

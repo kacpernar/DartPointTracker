@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn purple-form" @click="addPlayersAndClose">Add</button>
+                        <button type="button" class="btn btn-purple" @click="addPlayersAndClose">Add</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetSelectedPlayers">
                             Close
                         </button>
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, type PropType, defineComponent } from 'vue';
+import { ref, type PropType, defineComponent } from 'vue';
 import Player from '../models/player';
 import { onMounted } from "vue";
 import { Modal } from "bootstrap";
@@ -49,7 +49,7 @@ export default defineComponent({
     setup(props, { emit, expose }) {
         const selectedPlayers = ref<Player[]>([]);
 
-        const playersToSelect = computed(() => props.players.filter(player => !props.playersInGame.includes(player)));
+        const playersToSelect = ref<Player[]>([]);
 
         function selectPlayer(player: Player) {
             player.selected = !player.selected;
@@ -86,6 +86,7 @@ export default defineComponent({
 
         function show() {
             if (thisModalObj) {
+                playersToSelect.value = props.players.filter(player => !props.playersInGame.includes(player));
                 thisModalObj.show();
             }
         }
