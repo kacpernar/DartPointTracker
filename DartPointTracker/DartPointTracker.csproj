@@ -18,4 +18,13 @@
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap-icons\bootstrap-icons.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap-icons\bootstrap-icons.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap-icons\bootstrap-icons.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap-icons\bootstrap-icons.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap-icons\fonts\bootstrap-icons.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap-icons\fonts\bootstrap-icons.woff2" />
+  </ItemGroup>
+
 </Project>
