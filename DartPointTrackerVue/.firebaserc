@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "test": "dartpointtracker"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
