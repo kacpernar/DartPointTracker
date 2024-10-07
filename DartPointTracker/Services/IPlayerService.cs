@@ -7,5 +7,5 @@ public interface IPlayerService
     Task GetPlayers();
     Task<string?> CreatePlayer(string? name);
     List<Player> Players { get; set; }
-    Task SendGame(Game game);
+    Task<(bool,string)> SendGame(Game game);
 }

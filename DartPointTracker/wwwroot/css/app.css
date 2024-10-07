@@ -167,7 +167,9 @@ a, .btn-link {
     flex-wrap: nowrap; /* Prevent wrapping to next row */
 }
 
-
+.alert{
+    margin-top: 10px;
+}
 .input-group {
     margin-bottom: 10px;
 }

@@ -5,6 +5,7 @@
 @inject IGameService GameService
 @inject IPlayerService PlayerService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 <div class="container">
     <div class="row justify-content-center">
@@ -100,6 +101,7 @@
     protected override async Task OnInitializedAsync()
     {
         await PlayerService.GetPlayers();
+        await JSRuntime.InvokeVoidAsync("requestNotificationPermission");
     }
 
     public void RefreshState()

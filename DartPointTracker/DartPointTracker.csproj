@@ -27,4 +27,8 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap-icons\fonts\bootstrap-icons.woff2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\sw.js" />
+  </ItemGroup>
+
 </Project>

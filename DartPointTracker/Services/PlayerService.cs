@@ -2,24 +2,12 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using DartPointTracker.Dtos;
 using DartPointTracker.Models;
-using Microsoft.JSInterop;
 
 namespace DartPointTracker;
 
-public class PlayerService : IPlayerService
+public class PlayerService(HttpClient httpClient) : IPlayerService
 {
-    private readonly HttpClient _httpClient;
-
-    private readonly IJSRuntime _jsRuntime;
-
-
-    public List<Player> Players { get; set; } = new();
-
-    public PlayerService(HttpClient httpClient, IJSRuntime jsRuntime)
-    {
-        _httpClient = httpClient;
-        _jsRuntime = jsRuntime;
-    }
+    public List<Player> Players { get; set; } = [];
 
     public async Task<string?> CreatePlayer(string? name)
     {
@@ -29,14 +17,13 @@ public class PlayerService : IPlayerService
             {
                 return "Name cannot be empty";
             }
-            var response = await _httpClient.PostAsync("/Player?playerName=" + name, null);
+            var response = await httpClient.PostAsync("/Player?playerName=" + name, null);
             if (response.IsSuccessStatusCode)
             {
                 var player = await response.Content.ReadFromJsonAsync<Player>();
                 if (player != null)
                 {
-                    Players.Add(player);
-                    await CachePlayers(Players);
+                    await GetPlayers();
                     return null;
                 }
             }
@@ -44,72 +31,45 @@ public class PlayerService : IPlayerService
         }
         catch (Exception)
         {
-            return "Check your internet connection and try again.";
+            return "You are offline. Please connect to the internet to create a new player.";
         }
 
     }
 
     public async Task GetPlayers()
     {
-        var players = await FetchPlayersFromApi();
-        if (players != null && players.Count != 0)
-        {
-            Players.AddRange(players);
-            await CachePlayers(Players);
-        }
-        else
-        {
-            players = await GetCachedPlayers();
-            if (players != null && players.Count != 0)
-            {
-                Players.AddRange(players);
-            }
-        }
-    }
-
-    private async Task<List<Player>?> FetchPlayersFromApi()
-    {
         try
         {
-            return await _httpClient.GetFromJsonAsync<List<Player>>("/Players");
+            Players = await httpClient.GetFromJsonAsync<List<Player>>("/Players") ?? [];
         }
         catch (HttpRequestException ex)
         {
             Console.WriteLine($"Failed to fetch players from API: {ex.Message}");
-            return null;
+            Players = [];
         }
     }
 
-    public async Task SendGame(Game game)
+
+    public async Task<(bool,string)> SendGame(Game game)
     {
         try
         {
             var playerList = game.Ranking.
                 Select(player => new PlayerDto(Id: player.Id, Place: game.Ranking.IndexOf(player) + 1)).ToList();
-            var responseMessage = await _httpClient.PostAsJsonAsync("/Game", playerList);
+            var responseMessage = await httpClient.PostAsJsonAsync("/Game", playerList);
             if (responseMessage.IsSuccessStatusCode)
             {
                 game.GameSaved = true;
+                return (true,"The game was saved successfully, check the ranking to see the updated leaderboard.");
             }
+            game.GameSaved = false;
+            return (false,"Failed to save game, please try again.");
         }
         catch (HttpRequestException ex)
         {
-            Console.WriteLine($"Failed to send game to API: {ex.Message}");
+            game.GameSaved = true;
+            return (false,"Seems like you are offline. Your game will be saved once you are back online.");
         }
     }
 
-    private async Task CachePlayers(List<Player>? players)
-    {
-        // Store the players in browser local storage
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "players", JsonSerializer.Serialize(players));
-    }
-
-    private async Task<List<Player>?> GetCachedPlayers()
-    {
-        // Retrieve players from browser local storage
-        var playersJson = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "players");
-        return !string.IsNullOrWhiteSpace(playersJson) ? JsonSerializer.Deserialize<List<Player>>(playersJson) :
-            // No cached players found
-            new List<Player>();
-    }
 }

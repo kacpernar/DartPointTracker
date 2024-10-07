@@ -31,6 +31,12 @@
                     Ranking
                 </button>
             </div>
+            @if (_message != null)
+            {
+                <div class="alert @(_isSuccess ? "alert-success" : "alert-danger")" role="alert">
+                    @_message
+                </div>
+            }
 
         </div>
     }
@@ -70,6 +76,8 @@
 
 @code {
     private int _dartThrow;
+    string? _message;
+    bool _isSuccess;
 
     private void AddDartThrow(int value)
     {
@@ -84,7 +92,7 @@
 
     private async Task SendGame()
     {
-        await PlayerService.SendGame(GameService.CurrentGame);
+        (_isSuccess,_message) = await PlayerService.SendGame(GameService.CurrentGame);
     }
 
     private Task GoToRanking()

@@ -8,11 +8,10 @@
     <base href="/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="css/app.css" />
-    <link rel="icon" type="image/png" href="favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link href="DartPointTracker.styles.css" rel="stylesheet" />
     <link href="manifest.webmanifest" rel="manifest" />
-    <link rel="apple-touch-icon" sizes="512x512" href="512.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="192.png" />
+    <script src="notifications.js"></script>
 </head>
 
 <body>
@@ -30,7 +29,7 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script>navigator.serviceWorker.register('sw.js');</script>
 </body>
 
 </html>
