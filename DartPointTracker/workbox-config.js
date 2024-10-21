@@ -1,8 +1,8 @@
 module.exports = {
-    globDirectory: "wwwroot/",
+    globDirectory: "release/wwwroot/",
     globPatterns: [
-        '**/*.{html,webmanifest,json,js,css,svg,png,ico,woff,,ttf,otf,json,wasm,dll}'
+        '**/*.{html,webmanifest,json,js,css,svg,png,ico,wasm,dll}'
     ],
-    swSrc: 'sw.js',
-    swDest: 'wwwroot/sw.js',
+    swSrc: 'release/wwwroot/sw.js',
+    swDest: 'release/wwwroot/sw.js',
 };

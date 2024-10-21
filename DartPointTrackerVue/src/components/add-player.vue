@@ -1,27 +1,25 @@
 <template>
-    <div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="" aria-hidden="true" ref="modalEle">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Select Players:</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="" aria-hidden="true" ref="modalEle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Players:</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="playerName">Player Name:</label>
+                        <input type="text" class="form-control" id="playerName" v-model="newPlayerName" />
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="playerName">Player Name:</label>
-                            <input type="text" class="form-control" id="playerName" v-model="newPlayerName" />
-                        </div>
-                        <div class="alert alert-success" role="alert" v-if="isSuccess">
-                            Player added successfully!
-                        </div>
-                        <div class="alert alert-danger" role="alert" v-if="isFailed">
-                            {{ message }}
-                        </div>
+                    <div class="alert alert-success" role="alert" v-if="isSuccess">
+                        Player added successfully!
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-purple" @click="addNewPlayer()">Add Player</button>
+                    <div class="alert alert-danger" role="alert" v-if="isFailed">
+                        {{ message }}
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-purple" @click="addNewPlayer()">Add Player</button>
                 </div>
             </div>
         </div>

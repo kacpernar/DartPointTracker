@@ -67,7 +67,10 @@ export default defineConfig({
       },
       strategies: 'injectManifest',
       srcDir: 'src',
-      filename: 'sw.js'
+      filename: 'sw.js',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+      }
     })
   ],
   resolve: {
