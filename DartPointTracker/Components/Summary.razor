@@ -1,9 +1,7 @@
 @using DartPointTracker.Models
-
 <div class="mb-3 text-center">
     SUMMARY
 </div>
-
 <table>
     <thead>
     <tr>
@@ -14,24 +12,14 @@
     </tr>
     </thead>
     <tbody>
-    @{
-        var i = 1;
-        foreach (var player in Game.Ranking)
-        {
-            <tr>
-                <td>@i</td>
-                <td>@player.Name</td>
-                <td>@player.CurrentThrowNumber</td>
-                <td>@player.Score</td>
-            </tr>
-            i++;
-        }
-    }
+    @foreach (var player in Game.Ranking.Select((value, index) => new { value, index })) {
+        <tr>
+            <td>@(player.index + 1)</td>
+            <td>@player.value.Name</td>
+            <td>@player.value.CurrentThrowNumber</td>
+            <td>@player.value.Score</td>
+        </tr> }
     </tbody>
 </table>
-
 @code {
-    [Parameter]
-    public required Game Game { get; set; }
-
-}
+    [Parameter] public required Game Game { get; set; }}

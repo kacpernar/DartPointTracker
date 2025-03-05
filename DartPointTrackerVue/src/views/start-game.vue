@@ -13,7 +13,6 @@
                 <div class="mb-3 text-center">
                     PLAYERS
                 </div>
-
                 <div class="mb-3">
                     <div class="player-list">
                         <div v-for="player in playersInGame" :key="player.id" class="player-container">
@@ -24,7 +23,6 @@
                                 </svg>
                                 <span class="player-name">{{ player.name }}</span>
                             </div>
-
                             <div class="trash btn-grey" @click="excludePlayer(player)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                     class="bi bi-trash3-fill" viewBox="0 0 16 16">
@@ -56,7 +54,6 @@
                             Create New Player
                         </button>
                     </div>
-
                 </div>
                 <button class="btn start mt-2" @click="StartGame()" :disabled="playersInGame.length === 0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -69,15 +66,12 @@
             </div>
         </div>
     </div>
-
     <ChoosePlayer ref="choosePlayerModal" :playersInGame="playersInGame" @add-players="addSelectedPlayers"
-        :players="players" />
+        :players="allPlayers" />
     <AddPlayer ref="addPlayerModal" />
 </template>
-
 <script setup lang="ts">
-
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useGameStore } from '../stores/gameStore';
 import { usePlayerStore } from '../stores/playerStore';
 import { useRouter } from 'vue-router';
@@ -85,36 +79,44 @@ import Player from '../models/player';
 import ChoosePlayer from '../components/choose-player.vue';
 import AddPlayer from '../components/add-player.vue';
 import { Modal } from 'bootstrap';
-
 const gameSettings = [101, 201, 301, 401, 501]
 const router = useRouter();
 const gameStore = useGameStore();
 const playerStore = usePlayerStore();
-
 var selectedGamePoints = ref(301)
-const players = ref<Player[]>([]);
+const allPlayers = computed(() => playerStore.players);
 const playersInGame = ref<Player[]>([]);
-
 let choosePlayerModal = ref<Modal | null>(null);
 let addPlayerModal = ref<Modal | null>(null);
-
 function showChoosePlayerModal() {
     if (choosePlayerModal.value !== null) {
         choosePlayerModal.value.show();
     }
 }
-
 function openAddPlayerModal() {
     if (addPlayerModal.value !== null) {
         addPlayerModal.value.show();
     }
 }
-
 onMounted(async () => {
-    players.value = await playerStore.getPlayers();
+    await playerStore.getPlayers();
+    requestNotificationPermission();
 });
-
-
+function requestNotificationPermission() {
+    if ('Notification' in window) {
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Notifications enabled.');
+                } else if (permission === 'denied') {
+                    console.log('Notifications denied.');
+                }
+            });
+        }
+    } else {
+        console.log('This browser does not support notifications.');
+    }
+};
 function addSelectedPlayers(players: Player[]) {
     playersInGame.value = playersInGame.value.concat(players);
 }
@@ -122,20 +124,14 @@ function excludePlayer(player: Player) {
     playersInGame.value.splice(playersInGame.value.indexOf(player), 1);
     player.selected = false;
 }
-
-
 function selectGameMode(gamePoints: number) {
     selectedGamePoints.value = gamePoints
 }
-
 function StartGame() {
-
     gameStore.InitializeGame(playersInGame.value, selectedGamePoints.value);
     playersInGame.value = [];
     router.push('/game');
 }
-
-
 </script>
 
 <style scoped>

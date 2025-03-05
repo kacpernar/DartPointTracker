@@ -21,16 +21,11 @@
         </tbody>
     </table>
 </template>
-
 <script setup lang="ts">
 import Player from '../models/player';
 import { type PropType } from 'vue'
-
 defineProps({
     ranking: {
         type: Object as PropType<Player[]>,
-        required: true
-    }
-});
-
+        required: true}});
 </script>

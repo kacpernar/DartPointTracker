@@ -1,98 +1,48 @@
 namespace DartPointTracker.Models;
-
-public class Game
-{
-    public Game(List<Player> players, int gamePoints)
-    {
-        GameId = Guid.NewGuid().ToString();
-        GamePoints = gamePoints;
-        foreach (var player in players)
-        {
-            player.Score = gamePoints;
-        }
-
-        Players = new List<Player>(players);
-        CurrentPlayer = players[0];
-    }
-
-    string GameId { get; set; }
-    private int GamePoints { get; set; }
-
-    public List<Player> Players { get; set; }
-
+public class Game(List<Player> players, int gamePoints) {
+    private string GameId { get; set; } = Guid.NewGuid().ToString();
+    public List<Player> Players { get; set; } = players.Select(player => {
+        player.Score = gamePoints;
+        return player;
+    }).ToList();
     public List<Player> Ranking { get; set; } = [];
-    public Player CurrentPlayer { get; set; }
-
+    public Player CurrentPlayer { get; set; } = players[0];
     public bool IsFinished { get; set; }
     public bool GameSaved { get; set; }
-
-    private int _totalThrows;
-
-    public void AddDartThrow(int points)
-    {
-        _totalThrows++;
+    private int TotalThrows { get; set; } = 0;
+    public void AddDartThrow(int points) {
+        TotalThrows++;
         var (validThrow, currentRoundThrowNumber) = CurrentPlayer.AddDartThrow(points);
-
-        if (CurrentPlayer.Won)
-        {
+        if (CurrentPlayer.Won) {
             Ranking.Add(CurrentPlayer);
-            CurrentPlayer.ThrowNumberInGameAtWin = _totalThrows;
-            if (Players.Count(x => x.Won) == Players.Count - 1)
-            {
+            CurrentPlayer.ThrowNumberInGameAtWin = TotalThrows;
+            if (Players.Count(player => player.Won) == Players.Count - 1) {
                 IsFinished = true;
-                Ranking.Add(Players.First(x => !x.Won));
-                return;
-            }
-            NextPlayer();
-        }
-        else if (!validThrow || currentRoundThrowNumber == 0)
-        {
-            NextPlayer();
-        }
-
-    }
-    public void RemoveLastDartThrow()
-    {
-        if (_totalThrows > 0)
-        {
-            _totalThrows--;
-        }
-        else
-        {
-            return;
-        }
-        if (CurrentPlayer.CurrentRoundThrowNumber == 0)
-        {
+                Ranking.Add(Players.First(player => !player.Won));
+                return; }
+            NextPlayer(); }
+        else if (!validThrow || currentRoundThrowNumber == 0) {
+            NextPlayer(); } }
+    public void RemoveLastDartThrow() {
+        if (TotalThrows > 0) {
+            TotalThrows--; }
+        else {
+            return; }
+        if (CurrentPlayer.CurrentRoundThrowNumber == 0) {
             CurrentPlayer.ReloadPreviousRound();
-            PreviousPlayer();
-        }
-
-        while (CurrentPlayer.Won)
-        {
-            if (CurrentPlayer.ThrowNumberInGameAtWin == _totalThrows + 1)
-            {
+            PreviousPlayer(); }
+        while (CurrentPlayer.Won) {
+            if (CurrentPlayer.ThrowNumberInGameAtWin == TotalThrows + 1) {
                 CurrentPlayer.Won = false;
-                break;
-            }
-            PreviousPlayer();
-        }
-        CurrentPlayer.RemoveLastDartThrow();
-    }
-
-    private void PreviousPlayer()
-    {
+                break; }
+            PreviousPlayer(); }
+        CurrentPlayer.RemoveLastDartThrow(); }
+    private void PreviousPlayer() {
         var index = Players.IndexOf(CurrentPlayer);
-        CurrentPlayer = index == 0 ? Players[^1] : Players[index - 1];
-    }
-    private void NextPlayer()
-    {
-        do
-        {
+        CurrentPlayer = index == 0 ? Players[^1] : Players[index - 1]; }
+    private void NextPlayer() {
+        do {
             var index = Players.IndexOf(CurrentPlayer);
             CurrentPlayer = index == Players.Count - 1 ? Players[0] : Players[index + 1];
-        }
-        while (CurrentPlayer.Won);
-        CurrentPlayer.StartNewRound();
-    }
-
-}
+        } while (CurrentPlayer.Won);
+        CurrentPlayer.StartNewRound(); } }

@@ -11,9 +11,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-
 const emit = defineEmits(['score', 'back']);
-
 const numbers = Array.from(Array(21).keys()); // Numbers 0 to 20
 const bullseye = 25;
 let doubleClicked = ref(false);
@@ -26,24 +24,15 @@ function buttonClick(value: number) {
     emit('score', value * 3);
     tripleClicked.value = false;
   } else {
-    emit('score', value);
-  }
-};
-
+    emit('score', value);}};
 function doubleClick() {
   doubleClicked.value = true;
-  tripleClicked.value = false;
-};
-
+  tripleClicked.value = false;};
 function tripleClick() {
   doubleClicked.value = false;
-  tripleClicked.value = true;
-};
-
+  tripleClicked.value = true;};
 function backClick() {
-  emit('back');
-};
-
+  emit('back');};
 </script>
 
 <style scoped>

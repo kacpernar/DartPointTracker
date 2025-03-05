@@ -1,8 +1,12 @@
+interface Throw {
+  number: number
+  score: number
+}
 class Player {
   id: string | undefined
   name: string
   score: number
-  dartThrows: { throwNumber: number; points: number }[]
+  dartThrows: Throw[]
   currentRoundThrows: (number | null)[]
   throwNumberInGameAtWin: number
   won: boolean
@@ -10,9 +14,8 @@ class Player {
   eloRankingScore: number
   rank: number
   selected: boolean
-
   constructor(name: string, id?: string, eloRankingScore?: number) {
-    this.id = id // Initialize with appropriate value
+    this.id = id
     this.name = name
     this.dartThrows = []
     this.score = 0
@@ -24,23 +27,19 @@ class Player {
     this.selected = false
     this.eloRankingScore = eloRankingScore || 0
   }
-
   get currentThrowNumber(): number {
     return this.dartThrows.length
   }
   get currentRoundThrowNumber(): number {
     return this.currentThrowNumber % 3
   }
-
   startNewRound(): void {
     this.currentRoundThrows = [null, null, null]
   }
-
   addDartThrow(points: number): { validThrow: boolean; currentRoundThrowNumber: number } {
     this.currentRoundThrows[this.currentRoundThrowNumber] = points
-    this.dartThrows.push({ throwNumber: this.currentThrowNumber, points })
+    this.dartThrows.push({ number: this.currentThrowNumber, score: points })
     this.score -= points
-
     if (this.score < 0) {
       this.score += this.currentRoundThrows
         .filter((x): x is number => x !== null)
@@ -50,13 +49,10 @@ class Player {
     } else if (this.score === 0) {
       this.won = true
     }
-
     return { validThrow: true, currentRoundThrowNumber: this.currentRoundThrowNumber }
   }
-
   removeLastDartThrow(): void {
     if (this.currentThrowNumber === 0) return
-
     const lastThrow = this.dartThrows.pop()
     if (lastThrow) {
       this.currentRoundThrows[this.currentRoundThrowNumber] = null
@@ -66,18 +62,15 @@ class Player {
           .reduce((acc, x) => acc + x, 0)
         this.lastRoundOverThrow = false
       } else {
-        this.score += lastThrow.points
+        this.score += lastThrow.score
       }
     }
   }
-
   reloadPreviousRound(): void {
     if (this.currentThrowNumber < 3) return
-
-    this.currentRoundThrows[0] = this.dartThrows[this.dartThrows.length - 3].points
-    this.currentRoundThrows[1] = this.dartThrows[this.dartThrows.length - 2].points
-    this.currentRoundThrows[2] = this.dartThrows[this.dartThrows.length - 1].points
+    this.currentRoundThrows[0] = this.dartThrows[this.dartThrows.length - 3].score
+    this.currentRoundThrows[1] = this.dartThrows[this.dartThrows.length - 2].score
+    this.currentRoundThrows[2] = this.dartThrows[this.dartThrows.length - 1].score
   }
 }
-
 export default Player

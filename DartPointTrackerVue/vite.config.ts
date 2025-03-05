@@ -69,7 +69,7 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.js',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        globPatterns: ['**/*.{html,webmanifest,json,js,css,svg,png,ico}']
       }
     })
   ],

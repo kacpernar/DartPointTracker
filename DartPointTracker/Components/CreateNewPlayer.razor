@@ -23,57 +23,33 @@
         </div>
     </div>
 </div>
-
-
 @if (ShowBackdrop)
-{
-    <div class="modal-backdrop fade show"></div>
-}
-
-
+{ <div class="modal-backdrop fade show"></div> }
 @code {
-
-
-    [Parameter]
-    public required IPlayerService PlayerService { get; set; }
-
+    [Parameter] public required IPlayerService PlayerService { get; set; }
     bool _isSuccess;
     bool _isFailed;
     string? _newPlayerName;
     string? _message;
-    private async Task AddNewPlayer()
-    {
+    private async Task AddNewPlayer() {
         _message = await PlayerService.CreatePlayer(_newPlayerName);
-        if (string.IsNullOrEmpty(_message))
-        {
+        if (string.IsNullOrEmpty(_message)) {
             _newPlayerName = "";
             _isFailed = false;
-            _isSuccess = true;
-        }
-        else
-        {
+            _isSuccess = true; }
+        else {
             _isSuccess = false;
-            _isFailed = true;
-        }
-    }
-
+            _isFailed = true; } }
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop = false;
-
-    public void Open()
-    {
+    public void Open() {
         ModalDisplay = "block;";
         ModalClass = "Show";
         ShowBackdrop = true;
-        StateHasChanged();
-    }
-
-    public void Close()
-    {
+        StateHasChanged(); }
+    public void Close() {
         ModalDisplay = "none";
         ModalClass = "";
         ShowBackdrop = false;
-        StateHasChanged();
-    }
-}
+        StateHasChanged(); }}

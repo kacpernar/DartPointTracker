@@ -1,5 +1,4 @@
 import Player from './player'
-
 class Game {
   gameId: string
   gamePoints: number
@@ -9,7 +8,6 @@ class Game {
   isFinished: boolean
   gameSaved: boolean
   private totalThrows: number
-
   constructor(players: Player[], gamePoints: number) {
     this.gameId = (<any>crypto).randomUUID()
     this.gamePoints = gamePoints
@@ -23,11 +21,9 @@ class Game {
     this.gameSaved = false
     this.totalThrows = 0
   }
-
   addDartThrow(points: number): void {
     this.totalThrows++
     const { validThrow, currentRoundThrowNumber } = this.currentPlayer.addDartThrow(points)
-
     if (this.currentPlayer.won) {
       this.ranking.push(this.currentPlayer)
       this.currentPlayer.throwNumberInGameAtWin = this.totalThrows
@@ -41,19 +37,16 @@ class Game {
       this.nextPlayer()
     }
   }
-
   removeLastDartThrow(): void {
     if (this.totalThrows > 0) {
       this.totalThrows--
     } else {
       return
     }
-
     if (this.currentPlayer.currentRoundThrowNumber === 0) {
       this.currentPlayer.reloadPreviousRound()
       this.previousPlayer()
     }
-
     while (this.currentPlayer.won) {
       if (this.currentPlayer.throwNumberInGameAtWin === this.totalThrows + 1) {
         this.currentPlayer.won = false
@@ -61,25 +54,20 @@ class Game {
       }
       this.previousPlayer()
     }
-
     this.currentPlayer.removeLastDartThrow()
   }
-
   private previousPlayer(): void {
     const index = this.players.indexOf(this.currentPlayer)
     this.currentPlayer =
       index === 0 ? this.players[this.players.length - 1] : this.players[index - 1]
   }
-
   private nextPlayer(): void {
     do {
       const index = this.players.indexOf(this.currentPlayer)
       this.currentPlayer =
         index === this.players.length - 1 ? this.players[0] : this.players[index + 1]
     } while (this.currentPlayer.won)
-
     this.currentPlayer.startNewRound()
   }
 }
-
 export default Game

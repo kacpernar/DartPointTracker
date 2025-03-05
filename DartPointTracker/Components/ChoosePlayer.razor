@@ -4,91 +4,62 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Select Players:</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="ResetPlayersAndClose"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        @onclick="ResetPlayersAndClose"></button>
             </div>
             <div class="modal-body">
                 <div class="player-list">
-                    @foreach (var player in PlayersToSelect)
-                    {
-                        <div class="player-item item @(player.Selected ? "purple-form" : "")" @onclick="() => SelectPlayer(player)">
+                    @foreach (var player in PlayersToSelect) {
+                        <div class="player-item item @(player.Selected ? "purple-form" : "")"
+                             @onclick="() => SelectPlayer(player)">
                             @player.Name
-                        </div>
-                    }
+                        </div> }
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn purple-form"  @onclick="AddPlayersAndClose">Add</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        @onclick="ResetPlayersAndClose">
+                    Close
+                </button>
             </div>
         </div>
     </div>
 </div>
-
-
 @if (ShowBackdrop)
-{
-    <div class="modal-backdrop fade show"></div>
-}
-
-
+{ <div class="modal-backdrop fade show"></div> }
 @code {
-
-    [Parameter]
-    public required Pages.Index Parent { get; set; }
-
-    [Parameter]
-    public required List<Player> PlayersToSelect { get; set; }
-
-    [Parameter]
-    public EventCallback<List<Player>> OnAddPlayers { get; set; }
-
+    [Parameter] public required Pages.Index Parent { get; set; }
+    [Parameter] public required List<Player> PlayersToSelect { get; set; }
+    [Parameter] public EventCallback<List<Player>> OnAddPlayers { get; set; }
     private List<Player> _selectedPlayers = [];
     private List<Player> _playersToSelect = [];
-    private void SelectPlayer(Player player)
-    {
+    private void SelectPlayer(Player player) {
         player.Selected = !player.Selected;
-        if(player.Selected)
-        {
-            _selectedPlayers.Add(player);
-        }
-        else
-        {
-            _selectedPlayers.Remove(player);
-        }
-    }
-    private async Task AddPlayersAndClose()
-    {
+        if(player.Selected) {
+            _selectedPlayers.Add(player); }
+        else {
+            _selectedPlayers.Remove(player); } }
+    private async Task AddPlayersAndClose() {
         await OnAddPlayers.InvokeAsync(_selectedPlayers);
         _selectedPlayers = [];
-        Close();
-    }
-    private void ResetPlayersAndClose()
-    {
-        foreach (var player in PlayersToSelect)
-        {
-            player.Selected = false;
-        }
+        Close(); }
+    private void ResetPlayersAndClose() {
+        foreach (var player in PlayersToSelect) {
+            player.Selected = false; }
         _selectedPlayers = [];
-        Close();
-    }
-
+        Close(); }
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop = false;
-
-    public void Open()
-    {
+    public void Open() {
         ModalDisplay = "block;";
         ModalClass = "Show";
         ShowBackdrop = true;
-        StateHasChanged();
-    }
-
-    public void Close()
-    {
+        StateHasChanged(); }
+    public void Close() {
         ModalDisplay = "none";
         ModalClass = "";
         ShowBackdrop = false;
         StateHasChanged();
-        Parent.RefreshState();
-    }
-}
+        Parent.RefreshState(); }}

@@ -7,7 +7,6 @@
       </button>
     </div>
   </div>
-
   <div class="nav-scrollable" :class="{ 'collapsed': collapseNavMenu }" @click="toggleNavMenu">
     <nav class="flex-column">
       <div class="nav-item px-3">

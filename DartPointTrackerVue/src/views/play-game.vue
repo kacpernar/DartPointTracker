@@ -27,7 +27,6 @@
           {{ _message }}
         </div>
       </div>
-
     </div>
     <div v-else>
       <div class="players-wrapper">
@@ -49,11 +48,8 @@
       </div>
       <ChoosePoint @score="addDartThrow" @back="removeLastThrow" />
     </div>
-
   </div>
 </template>
-
-
 <script setup lang="ts">
 import ChoosePoint from '../components/choose-point.vue';
 import GameSummary from '../components/game-summary.vue';
@@ -62,31 +58,22 @@ import { useGameStore } from '../stores/gameStore';
 import { usePlayerStore } from '../stores/playerStore';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-
 var gameStore = useGameStore();
 var currentGame = gameStore.currentGame;
 var playerStore = usePlayerStore();
 const router = useRouter();
-
 const _isSuccess = ref<boolean | null>(null);
 const _message = ref<string | null>(null);
-
 function addDartThrow(score: number) {
-  currentGame?.addDartThrow(score);
-}
+  currentGame?.addDartThrow(score);}
 function removeLastThrow() {
-  currentGame?.removeLastDartThrow();
-}
+  currentGame?.removeLastDartThrow();}
 function goToRanking() {
-  router.push('/ranking');
-}
+  router.push('/ranking');}
 async function sendGame() {
   const [success, message] = await playerStore.sendGame(currentGame as Game);
   _isSuccess.value = success;
-  _message.value = message;
-}
-
-
+  _message.value = message;}
 </script>
 
 

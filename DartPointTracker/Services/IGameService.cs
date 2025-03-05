@@ -6,5 +6,5 @@ public interface IGameService
 {
     public Game? CurrentGame { get; set; }
 
-    public Task InitializeGame(List<Player> players, int gamePoints);
+    public void InitializeGame(List<Player> players, int gamePoints);
 }

@@ -1,27 +1,29 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="mb-3 text-center">
-                PLAYER RANKING
+            <div v-if="rankedPlayers.length > 0">
+                <div class="mb-3 text-center">
+                    PLAYER RANKING
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Elo Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="player in rankedPlayers" :key="player.id"
+                            :style="'background-color: ' + getRowStyle(player)">
+                            <td>{{ player.rank }}</td>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.eloRankingScore }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Elo Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="player in rankedPlayers" :key="player.id"
-                        :style="'background-color: ' + (getRowStyle(player))">
-                        <td>{{ player.rank }}</td>
-                        <td>{{ player.name }}</td>
-                        <td>{{ player.eloRankingScore }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p v-if="rankedPlayers.length === 0">No players available.</p>
+            <p v-else>No players available.</p>
         </div>
     </div>
 </template>
@@ -30,14 +32,10 @@
 import { computed, onMounted } from 'vue';
 import { usePlayerStore } from '../stores/playerStore';
 import Player from '../models/player';
-
 const playerStore = usePlayerStore();
-
-// Fetch players when the component is mounted
 onMounted(async () => {
     await playerStore.getPlayers();
 });
-
 const rankedPlayers = computed(() => {
     return playerStore.players
         .slice()
@@ -47,7 +45,6 @@ const rankedPlayers = computed(() => {
             return player;
         });
 });
-
 function getRowStyle(player: Player) {
     if (player.rank === 1) {
         return 'green';
@@ -57,7 +54,6 @@ function getRowStyle(player: Player) {
     }
     return '';
 }
-
 </script>
 
 <style scoped></style>

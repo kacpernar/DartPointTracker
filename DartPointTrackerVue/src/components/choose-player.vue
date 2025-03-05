@@ -33,25 +33,17 @@ import { ref, type PropType } from 'vue';
 import Player from '../models/player';
 import { onMounted } from "vue";
 import { Modal } from "bootstrap";
-
 const props = defineProps({
     players: {
         type: Array as PropType<Player[]>,
-        required: true
-    },
+        required: true},
     playersInGame: {
         type: Array as PropType<Player[]>,
-        required: true
-    }
-});
-
+        required: true}});
 const emit = defineEmits(['add-players']);
 defineExpose({ show });
-
 const selectedPlayers = ref<Player[]>([]);
-
 const playersToSelect = ref<Player[]>([]);
-
 function selectPlayer(player: Player) {
     player.selected = !player.selected;
     if (player.selected) {
@@ -59,45 +51,27 @@ function selectPlayer(player: Player) {
     } else {
         const index = selectedPlayers.value.findIndex(p => p.id === player.id);
         if (index !== -1) {
-            selectedPlayers.value.splice(index, 1);
-        }
-    }
-}
-
+            selectedPlayers.value.splice(index, 1);}}}
 function addPlayersAndClose() {
     emit('add-players', selectedPlayers.value);
     selectedPlayers.value = [];
-    closeModal();
-}
-
+    closeModal();}
 function resetSelectedPlayers() {
     selectedPlayers.value.forEach(player => player.selected = false);
     selectedPlayers.value = [];
-    closeModal();
-}
-
+    closeModal();}
 const modalEle = ref(null);
 let thisModalObj: Modal | null = null;
-
 onMounted(() => {
     if (modalEle.value) {
-        thisModalObj = new Modal(modalEle.value);
-    }
-});
-
+        thisModalObj = new Modal(modalEle.value);}});
 function show() {
     if (thisModalObj) {
         playersToSelect.value = props.players.filter(player => !props.playersInGame.includes(player));
-        thisModalObj.show();
-    }
-}
-
+        thisModalObj.show();}}
 function closeModal() {
     if (thisModalObj) {
-        thisModalObj.hide();
-    }
-}
-
+        thisModalObj.hide();}}
 </script>
 
 <style scoped>

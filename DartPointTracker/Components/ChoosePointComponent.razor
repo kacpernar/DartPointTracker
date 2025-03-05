@@ -1,52 +1,31 @@
 <div class="number-pad">
-    @foreach (var number in _numbers)
-    {
-        <button class="btn btn-point" @onclick="() => ButtonClick(number)">@number</button>
-    }
+    @foreach (var number in _numbers) {
+        <button class="btn btn-point" @onclick="() => ButtonClick(number)">@number</button> }
     <button class="btn btn-point" @onclick="() =>ButtonClick(Bullseye)" disabled="@_tripleClicked">@Bullseye</button>
     <button class="btn btn-light-purple" @onclick="DoubleClick">x2</button>
     <button class="btn btn-primary" @onclick="TripleClick">x3</button>
 </div>
 <button class="btn btn-grey" @onclick="BackClick">Back</button>
-
 @code {
     private readonly List<int> _numbers = Enumerable.Range(0, 21).ToList(); // Numbers 0 to 20
     private const int Bullseye = 25;
     private bool _doubleClicked;
     private bool _tripleClicked;
-
     [Parameter] public EventCallback<int> OnButtonClick { get; set; }
     [Parameter] public EventCallback OnBackClick { get; set; }
-
     private void ButtonClick(int value)
-    {
-        if (_doubleClicked)
-        {
+    { if (_doubleClicked) {
             value *= 2;
-            _doubleClicked = false;
-        }
-        else if (_tripleClicked)
-        {
+            _doubleClicked = false; }
+        else if (_tripleClicked) {
             value *= 3;
-            _tripleClicked = false;
-        }
-        OnButtonClick.InvokeAsync(value);
-    }
-
-    private void DoubleClick()
-    {
+            _tripleClicked = false; }
+        OnButtonClick.InvokeAsync(value); }
+    private void DoubleClick() {
         _doubleClicked = true;
-        _tripleClicked = false;
-    }
-
-    private void TripleClick()
-    {
+        _tripleClicked = false; }
+    private void TripleClick() {
         _doubleClicked = false;
-        _tripleClicked = true;
-    }
-
-    private void BackClick()
-    {
-        OnBackClick.InvokeAsync();
-    }
-}
+        _tripleClicked = true; }
+    private void BackClick() {
+        OnBackClick.InvokeAsync(); }}

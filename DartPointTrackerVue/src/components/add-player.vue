@@ -25,12 +25,10 @@
         </div>
     </div>
 </template>
-
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { usePlayerStore } from '../stores/playerStore';
 import { Modal } from "bootstrap";
-
 const playerStore = usePlayerStore();
 const modalEle = ref(null);
 const isSuccess = ref(false);
@@ -38,13 +36,9 @@ const isFailed = ref(false);
 const message = ref<string | null>(null);
 let thisModalObj: Modal | null = null;
 const newPlayerName = ref<string | null>(null);
-
 onMounted(() => {
     if (modalEle.value) {
-        thisModalObj = new Modal(modalEle.value);
-    }
-});
-
+        thisModalObj = new Modal(modalEle.value);}});
 async function addNewPlayer() {
     message.value = await playerStore.createPlayer(newPlayerName.value);
     if (!message.value) {
@@ -53,14 +47,10 @@ async function addNewPlayer() {
         isSuccess.value = true;
     } else {
         isSuccess.value = false;
-        isFailed.value = true;
-    }
-}
+        isFailed.value = true;}}
 function show() {
     if (thisModalObj) {
-        thisModalObj.show();
-    }
-}
+        thisModalObj.show();}}
 defineExpose({ show });
 </script>
 

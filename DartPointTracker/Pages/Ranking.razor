@@ -1,12 +1,9 @@
 ﻿@page "/ranking"
 @using DartPointTracker.Models
 @inject IPlayerService PlayerService
-<PageTitle>Ranking</PageTitle>
-
 <div class="container">
     <div class="row">
-        @if (RankedPlayers != null && RankedPlayers.Any())
-        {
+        @if (RankedPlayers != null && RankedPlayers.Any()) {
             <div class="mb-3 text-center">
                 PLAYER RANKING
             </div>
@@ -19,54 +16,29 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var player in RankedPlayers)
-                {
+                @foreach (var player in RankedPlayers) {
                     <tr style="@(GetRowStyle(player))">
                         <td>@player.Rank</td>
                         <td>@player.Name</td>
                         <td>@player.EloRankingScore</td>
-                    </tr>
-                }
+                    </tr> }
                 </tbody>
-            </table>
-        }
-        else
-        {
-            <p>No players available.</p>
-        }
-
+            </table> }
+        else {
+            <p>No players available.</p> }
     </div>
 </div>
-
-
 @code {
-
     private List<Player> RankedPlayers { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
+    protected override async Task OnInitializedAsync() {
         await PlayerService.GetPlayers();
-        RankedPlayers = PlayerService.Players.OrderByDescending(p => p.EloRankingScore).ToList();
-
-        for (int i = 0; i < RankedPlayers.Count; i++)
-        {
-            RankedPlayers[i].Rank = i + 1;
-        }
-    }
-
+        RankedPlayers = PlayerService.Players
+            .OrderByDescending(p => p.EloRankingScore)
+            .Select((player, index) => { player.Rank = index + 1; return player; })
+            .ToList(); }
     private string GetRowStyle(Player player)
-    {
-        if (player.Rank == 1)
-        {
-            return "background-color: green;";
-        }
-
-        if (player.Rank is 2 or 3)
-        {
-            return "background-color: orange;";
-        }
-
-        return "";
-    }
-
-}
+    { if (player.Rank == 1) {
+            return "background-color: green;"; }
+        if (player.Rank is 2 or 3) {
+            return "background-color: orange;"; }
+        return ""; }}

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DartPointTracker", "DartPoi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DartPointTracker.Api", "DartPointTracker.Api\DartPointTracker.Api.csproj", "{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{8A0645EB-C00F-4246-A63D-91FE1D5BC550}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EB2F7CC-80D4-4C71-9762-2DBBA44C3C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A0645EB-C00F-4246-A63D-91FE1D5BC550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0645EB-C00F-4246-A63D-91FE1D5BC550}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0645EB-C00F-4246-A63D-91FE1D5BC550}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0645EB-C00F-4246-A63D-91FE1D5BC550}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,11 +4,8 @@
 @inject IGameService GameService
 @inject IPlayerService PlayerService
 @inject NavigationManager NavigationManager
-
-@if (GameService.CurrentGame is not null)
-{
-    if (GameService.CurrentGame.IsFinished)
-    {
+@if (GameService.CurrentGame is not null) {
+    if (GameService.CurrentGame.IsFinished) {
         <div class="container">
             <Summary Game="GameService.CurrentGame"></Summary>
             <div>
@@ -31,74 +28,41 @@
                     Ranking
                 </button>
             </div>
-            @if (_message != null)
-            {
+            @if (_message != null) {
                 <div class="alert @(_isSuccess ? "alert-success" : "alert-danger")" role="alert">
                     @_message
-                </div>
-            }
-
-        </div>
-    }
-    else
-    {
+                </div> }
+        </div> }
+    else {
         <div class="players-wrapper">
-            @foreach (var player in GameService.CurrentGame.Players)
-            {
+            @foreach (var player in GameService.CurrentGame.Players) {
                 <div class="player-info @(player.Id == GameService.CurrentGame.CurrentPlayer.Id ? "active-player" : "inactive-player")">
                     <div>@player.Name: @player.Score</div>
-
                     <div class="input-group">
-
-                        @if (player.Won)
-                        {
-                            <h1>Won</h1>
-                        }
-                        else
-                        {
+                        @if (player.Won) {
+                            <h1>Won</h1> }
+                        else {
                             <div class="circle-container">
-                                @foreach (var dartThrow in player.CurrentRoundThrows)
-                                {
-                                    <div class="circle">@dartThrow</div>
-                                }
-                            </div>
-                        }
+                                @foreach (var dartThrow in player.CurrentRoundThrows) {
+                                    <div class="circle">@dartThrow</div> }
+                            </div> }
                     </div>
-                </div>
-            }
+                </div> }
         </div>
         <ChoosePointComponent
             OnButtonClick="AddDartThrow"
-            OnBackClick="HandleBackClick"/>
-    }
-}
-
-
+            OnBackClick="HandleBackClick"/> } }
 @code {
     private int _dartThrow;
     string? _message;
     bool _isSuccess;
-
-    private void AddDartThrow(int value)
-    {
+    private void AddDartThrow(int value) {
         _dartThrow = value;
-        GameService.CurrentGame.AddDartThrow(_dartThrow);
-    }
-
-    private void HandleBackClick()
-    {
-        GameService.CurrentGame.RemoveLastDartThrow();
-    }
-
-    private async Task SendGame()
-    {
-        (_isSuccess,_message) = await PlayerService.SendGame(GameService.CurrentGame);
-    }
-
-    private Task GoToRanking()
-    {
+        GameService.CurrentGame.AddDartThrow(_dartThrow); }
+    private void HandleBackClick() {
+        GameService.CurrentGame.RemoveLastDartThrow(); }
+    private async Task SendGame() {
+        (_isSuccess,_message) = await PlayerService.SendGame(GameService.CurrentGame); }
+    private Task GoToRanking() {
         NavigationManager.NavigateTo("/ranking");
-        return Task.CompletedTask;
-    }
-
-}
+        return Task.CompletedTask; }}
