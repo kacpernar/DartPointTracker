@@ -26,6 +26,9 @@ jobs:
       - name: Build with dotnet
         run: dotnet build DartPointTracker.Api/DartPointTracker.Api.csproj --configuration Release
 
+      - name: Install EF Tools
+        run: dotnet tool install --global dotnet-ef
+
       - name: Apply EF Migrations
         run: dotnet ef database update
         working-directory: ./DartPointTracker.Api
