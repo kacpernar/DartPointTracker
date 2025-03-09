@@ -26,6 +26,10 @@ jobs:
       - name: Build with dotnet
         run: dotnet build DartPointTracker.Api/DartPointTracker.Api.csproj --configuration Release
 
+      - name: Apply EF Migrations
+        run: dotnet ef database update
+        working-directory: ./DartPointTracker.Api
+
       - name: dotnet publish
         run: dotnet publish DartPointTracker.Api/DartPointTracker.Api.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
@@ -65,4 +69,3 @@ jobs:
           app-name: 'dart-api'
           slot-name: 'Production'
           package: .
-          
