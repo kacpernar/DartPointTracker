@@ -1,9 +1,16 @@
 ﻿@page "/ranking"
+@using System.Diagnostics
 @using DartPointTracker.Models
 @inject IPlayerService PlayerService
+
 <div class="container">
     <div class="row">
-        @if (RankedPlayers != null && RankedPlayers.Any()) {
+        @if (IsLoading)
+        {
+            <p>Loading players...</p>
+        }
+        else if (RankedPlayers != null && RankedPlayers.Any())
+        {
             <div class="mb-3 text-center">
                 PLAYER RANKING
             </div>
@@ -16,29 +23,58 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var player in RankedPlayers) {
+                @foreach (var player in RankedPlayers)
+                {
                     <tr style="@(GetRowStyle(player))">
                         <td>@player.Rank</td>
                         <td>@player.Name</td>
                         <td>@player.EloRankingScore</td>
-                    </tr> }
+                    </tr>
+                }
                 </tbody>
-            </table> }
-        else {
-            <p>No players available.</p> }
+            </table>
+        }
+        else
+        {
+            <p>No players available.</p>
+        }
     </div>
 </div>
+
 @code {
-    private List<Player> RankedPlayers { get; set; }
-    protected override async Task OnInitializedAsync() {
+    private List<Player> RankedPlayers { get; set; } = new();
+    private bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var sw1 = Stopwatch.StartNew();
         await PlayerService.GetPlayers();
+        sw1.Stop();
+        Console.WriteLine($"Time to get players: {sw1.ElapsedMilliseconds}ms");
+
+        var sw = Stopwatch.StartNew();
         RankedPlayers = PlayerService.Players
             .OrderByDescending(p => p.EloRankingScore)
-            .Select((player, index) => { player.Rank = index + 1; return player; })
-            .ToList(); }
+            .Select((player, index) =>
+            {
+                player.Rank = index + 1;
+                return player;
+            })
+            .ToList();
+        sw.Stop();
+        Console.WriteLine($"Time to rank players: {sw.ElapsedMilliseconds}ms");
+
+        IsLoading = false;
+    }
+
     private string GetRowStyle(Player player)
-    { if (player.Rank == 1) {
-            return "background-color: green;"; }
-        if (player.Rank is 2 or 3) {
-            return "background-color: orange;"; }
-        return ""; }}
+    {
+        return player.Rank switch
+        {
+            1 => "background-color: green;",
+            2 or 3 => "background-color: orange;",
+            _ => ""
+        };
+    }
+
+}
